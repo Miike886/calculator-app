@@ -16,7 +16,7 @@ Implementada y validada.
 - El backend responde JSON con `expression` y `result`.
 - El backend devuelve errores estructurados para JSON invalido, expresion vacia, expresion incompleta u operacion no soportada.
 - El frontend incluye un cliente API para `POST /api/v1/calculations`.
-- La UI minima permite ingresar dos numeros, enviar una suma, mostrar expresion, resultado y errores.
+- La UI minima de formulario permitia ingresar dos numeros, enviar una suma, mostrar expresion, resultado y errores; se reemplaza posteriormente por la calculadora visual en `FEAT-003`.
 - El backend habilita CORS basico para permitir llamadas desde el frontend en desarrollo.
 
 ## Criterios de aceptacion
@@ -149,12 +149,12 @@ Response de error:
 
 - Al agregar nuevas operaciones, extender primero la logica de dominio y sus pruebas.
 - Mantener compatibilidad del contrato `POST /api/v1/calculations`.
-- Reemplazar la UI minima por la calculadora final sin romper el cliente API.
+- Mantener la UI visual conectada al cliente API sin romper el contrato existente.
 - Agregar e2e cuando exista el flujo visual definitivo.
 
 ## Posibles mejoras futuras
 
 - Agregar resta, multiplicacion y division.
 - Implementar parser con precedencia aritmetica.
-- Implementar UI completa con botones de calculadora.
+- Extender la UI visual con operaciones adicionales cuando el backend las soporte.
 - Agregar pruebas e2e del flujo real en navegador.

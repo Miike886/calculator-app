@@ -379,3 +379,80 @@ No implementes todavía todas las operaciones ni la UI visual completa. Primero 
 
 React → REST API → Go → resultado → React
 ```
+
+## Prompt 9
+
+```text
+Usa la Skill `feature-implementer` para reemplazar la interfaz provisional por una calculadora visual interactiva, respetando `docs/ui-specification.md` y el asset de referencia adjunto.
+
+La imagen es una referencia para el estilo, proporciones y jerarquía visual. La siguiente distribución es la fuente de verdad funcional:
+
+┌─────┬─────┬─────┬─────┐
+│  C  │ DEL │     │  ÷  │
+├─────┼─────┼─────┼─────┤
+│  7  │  8  │  9  │  ×  │
+├─────┼─────┼─────┼─────┤
+│  4  │  5  │  6  │  −  │
+├─────┼─────┼─────┼─────┤
+│  1  │  2  │  3  │  +  │
+├─────┼─────┼─────┼─────┤
+│  0  │  .  │     │  =  │
+└─────┴─────┴─────┴─────┘
+
+Los espacios vacíos pueden usarse para extender los botones `C` y `0`, o conservarse según la composición visual más coherente.
+
+La interfaz debe incluir:
+
+- display para la expresión actual y el resultado;
+- botones clickeables del `0` al `9`;
+- punto decimal;
+- botones `C`, `DEL` y `=`;
+- suma, resta, multiplicación y división;
+- entrada mediante clic y teclado;
+- soporte para `Enter`, `Backspace` y `Escape`;
+- estados de carga, resultado y error;
+- diseño responsive utilizable desde 320 px.
+
+Los clics y las teclas deben utilizar la misma lógica de estado. Al presionar `=`, consume el endpoint existente del backend.
+
+No agregues todavía potencia, raíz cuadrada ni porcentaje.
+Usa el asset de referencia como referencia visual
+```
+
+## Prompt 10
+
+```text
+Usa la Skill `feature-implementer` para mejorar la presentación de errores de la calculadora sin modificar su diseño general.
+
+Integra los errores dentro del display superior en lugar de mostrarlos en un bloque separado debajo del teclado.
+
+Cuando ocurra un error:
+
+- conserva la expresión actual en la parte superior del display;
+- muestra `Error` en el área principal del resultado;
+- muestra debajo un mensaje breve y claro;
+- aplica un estado visual de error discreto dentro del display;
+- no cambies el tamaño general de la calculadora;
+- no provoques saltos de layout.
+
+Usa mensajes breves, por ejemplo:
+
+- `Completa la operación`
+- `No se puede dividir entre cero`
+- `Ingresa un número válido`
+- `No fue posible realizar el cálculo`
+
+El error debe limpiarse cuando el usuario:
+
+- ingrese un nuevo número;
+- presione `DEL`;
+- presione `C`;
+- seleccione una nueva operación.
+
+Mantén accesibilidad mediante `role="alert"` o `aria-live`, sin depender únicamente del color.
+
+No modifiques el backend ni agregues nuevas operaciones.
+
+Agrega este prompt a `docs/prompts-usados.md`.
+No hagas commits ni modifiques ramas.
+```
