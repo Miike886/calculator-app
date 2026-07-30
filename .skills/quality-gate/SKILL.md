@@ -44,6 +44,7 @@ Evaluar cuando aplique:
 - pruebas de regresion para errores corregidos
 - casos exitosos, invalidos, limites y errores esperados
 - organizacion clara por capa y comportamiento, sin suites monoliticas que oculten brechas de cobertura
+- cumplimiento de la estructura de tests definida por la arquitectura, incluyendo `internal/<capa>/tests/` en backend cuando exista esa convencion
 
 ## Revision de diff
 

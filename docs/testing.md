@@ -6,7 +6,7 @@ Este proyecto valida la calculadora en cuatro capas.
 
 Las pruebas deben separarse por capa y por comportamiento verificable.
 
-- Backend: los unit tests viven junto al paquete que prueban. La logica de calculo se prueba en `internal/calculation/*_test.go`; los handlers y contrato HTTP en `internal/transport/*_test.go`.
+- Backend: los tests viven en una subcarpeta `tests/` dentro de la capa que prueban. La logica de calculo se prueba en `internal/calculation/tests/`; los handlers y contrato HTTP en `internal/transport/tests/`.
 - Frontend unitario: la logica pura se prueba en `frontend/tests/calculator.test.ts`.
 - Frontend componentes: los tests de React se dividen por responsabilidad usando `frontend/tests/app.<area>.test.tsx`.
 - E2E: los flujos reales se dividen por escenario critico en `frontend/e2e/*.spec.ts`.
@@ -31,6 +31,11 @@ Cubre:
 - division entre cero;
 - entradas vacias, incompletas, caracteres invalidos y operaciones futuras no soportadas.
 
+Estructura actual:
+
+- `backend/internal/calculation/tests/calculation_success_test.go`: operaciones exitosas, decimales, negativos y evaluacion izquierda a derecha.
+- `backend/internal/calculation/tests/calculation_errors_test.go`: errores de validacion, operaciones no soportadas y division entre cero.
+
 ## Backend handlers / contrato HTTP
 
 Comando:
@@ -46,6 +51,11 @@ Cubre:
 - `POST /api/v1/calculations`;
 - respuestas exitosas JSON;
 - errores estructurados con codigos estables.
+
+Estructura actual:
+
+- `backend/internal/transport/tests/health_handler_test.go`: contrato HTTP de `GET /health`.
+- `backend/internal/transport/tests/calculations_handler_test.go`: contrato HTTP de `POST /api/v1/calculations`.
 
 ## Frontend unitario y componentes
 

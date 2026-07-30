@@ -43,15 +43,17 @@ calculator-app/
       api/
     internal/
       calculation/
-        *_test.go
+        tests/
+          *_test.go
       transport/
-        *_test.go
+        tests/
+          *_test.go
       config/
     go.mod
   README.md
 ```
 
-La estructura efectiva usa `frontend/` y `backend/` para mantener el monorepo simple. Las pruebas e2e viven dentro de `frontend/e2e/` porque Playwright y sus servidores de prueba se configuran desde el paquete frontend.
+La estructura efectiva usa `frontend/` y `backend/` para mantener el monorepo simple. Las pruebas e2e viven dentro de `frontend/e2e/` porque Playwright y sus servidores de prueba se configuran desde el paquete frontend. En backend, los tests viven en `tests/` dentro de cada capa para mantener separados los archivos de produccion y las suites de validacion.
 
 ## Responsabilidades del frontend
 
@@ -240,6 +242,7 @@ Responsabilidades:
 Obligatoria:
 
 - Mantener los tests separados por capa: dominio backend, handlers HTTP, logica pura frontend, componentes React y e2e.
+- En backend, ubicar tests en `internal/<capa>/tests/` usando paquetes externos de prueba cuando sea posible, por ejemplo `calculation_test` y `transport_test`.
 - Evitar archivos de test genericos que mezclen render, entrada, API, errores y flujos completos.
 - Dividir suites por comportamiento cuando un archivo empiece a ser dificil de leer.
 - Mantener helpers de prueba pequenos y compartidos solo cuando reduzcan duplicacion real.

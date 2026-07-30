@@ -1,4 +1,4 @@
-package transport
+package transport_test
 
 import (
 	"bytes"
@@ -6,7 +6,20 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"calculator-app/backend/internal/transport"
 )
+
+type calculationResponse struct {
+	Expression string  `json:"expression"`
+	Result     float64 `json:"result"`
+}
+
+type errorResponse struct {
+	Error struct {
+		Code string `json:"code"`
+	} `json:"error"`
+}
 
 func TestCalculationsHandlerCalculatesBasicOperations(t *testing.T) {
 	tests := []struct {
@@ -27,7 +40,7 @@ func TestCalculationsHandlerCalculatesBasicOperations(t *testing.T) {
 			request := httptest.NewRequest(http.MethodPost, "/api/v1/calculations", bytes.NewBufferString(`{"expression":"`+test.expression+`"}`))
 			response := httptest.NewRecorder()
 
-			CalculationsHandler(response, request)
+			transport.CalculationsHandler(response, request)
 
 			if response.Code != http.StatusOK {
 				t.Fatalf("expected status %d, got %d", http.StatusOK, response.Code)
@@ -53,7 +66,7 @@ func TestCalculationsHandlerRejectsInvalidJSON(t *testing.T) {
 	request := httptest.NewRequest(http.MethodPost, "/api/v1/calculations", bytes.NewBufferString(`{`))
 	response := httptest.NewRecorder()
 
-	CalculationsHandler(response, request)
+	transport.CalculationsHandler(response, request)
 
 	assertErrorCode(t, response, http.StatusBadRequest, "INVALID_JSON")
 }
@@ -62,7 +75,7 @@ func TestCalculationsHandlerRejectsUnsupportedOperation(t *testing.T) {
 	request := httptest.NewRequest(http.MethodPost, "/api/v1/calculations", bytes.NewBufferString(`{"expression":"2^3"}`))
 	response := httptest.NewRecorder()
 
-	CalculationsHandler(response, request)
+	transport.CalculationsHandler(response, request)
 
 	assertErrorCode(t, response, http.StatusBadRequest, "UNSUPPORTED_OPERATION")
 }
@@ -71,7 +84,7 @@ func TestCalculationsHandlerRejectsInvalidCharacter(t *testing.T) {
 	request := httptest.NewRequest(http.MethodPost, "/api/v1/calculations", bytes.NewBufferString(`{"expression":"2a3"}`))
 	response := httptest.NewRecorder()
 
-	CalculationsHandler(response, request)
+	transport.CalculationsHandler(response, request)
 
 	assertErrorCode(t, response, http.StatusBadRequest, "INVALID_CHARACTER")
 }
@@ -80,7 +93,7 @@ func TestCalculationsHandlerRejectsEmptyExpression(t *testing.T) {
 	request := httptest.NewRequest(http.MethodPost, "/api/v1/calculations", bytes.NewBufferString(`{"expression":""}`))
 	response := httptest.NewRecorder()
 
-	CalculationsHandler(response, request)
+	transport.CalculationsHandler(response, request)
 
 	assertErrorCode(t, response, http.StatusBadRequest, "EMPTY_EXPRESSION")
 }
@@ -89,7 +102,7 @@ func TestCalculationsHandlerRejectsExpressionOverMaxLength(t *testing.T) {
 	request := httptest.NewRequest(http.MethodPost, "/api/v1/calculations", bytes.NewBufferString(`{"expression":"1234567890123456789012345678901234567890123456789+1"}`))
 	response := httptest.NewRecorder()
 
-	CalculationsHandler(response, request)
+	transport.CalculationsHandler(response, request)
 
 	assertErrorCode(t, response, http.StatusBadRequest, "EXPRESSION_TOO_LONG")
 }
@@ -98,7 +111,7 @@ func TestCalculationsHandlerRejectsDivisionByZero(t *testing.T) {
 	request := httptest.NewRequest(http.MethodPost, "/api/v1/calculations", bytes.NewBufferString(`{"expression":"10/0"}`))
 	response := httptest.NewRecorder()
 
-	CalculationsHandler(response, request)
+	transport.CalculationsHandler(response, request)
 
 	assertErrorCode(t, response, http.StatusBadRequest, "DIVISION_BY_ZERO")
 }

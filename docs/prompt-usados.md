@@ -517,3 +517,11 @@ tanto para back, como para front. Revisa eso con la skill que corresponde y si e
 Siento que las capas de test no están bien alineadas, hay muchas incosistencias, hay que alinear la arquitectura mpara mantener todo eso ordenado
 no sé cómo lo consideres, pero creo que es más organizado separar cada test en archivos diferentes, porque llega un punto en el que el archivo de test se vuelve ilegible
 ```
+
+## Prompt 14
+
+```text
+aún así dentro del back siento que están un poco desacoplados los test. En transport se nota todo amontonado entre los archivos normales y los de test
+
+Alinea todos los skills y la nueva documentación con estos nuevos cambios
+```

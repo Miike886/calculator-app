@@ -31,6 +31,7 @@ description: "Implementacion incremental de nuevas features, correcciones o mejo
 - Incluir validacion de entradas y manejo de errores donde aplique.
 - Cubrir casos exitosos, invalidos y limite con pruebas nuevas o actualizadas.
 - Mantener las pruebas separadas por capa y comportamiento; dividir suites cuando mezclen responsabilidades o se vuelvan dificiles de leer.
+- En repositorios con convencion de tests por subcarpeta, respetar `internal/<capa>/tests/` en backend y paquetes externos de prueba cuando aplique.
 - Actualizar contratos de API y documentacion cuando cambie el comportamiento.
 - Preservar cambios ajenos existentes en el workspace.
 
