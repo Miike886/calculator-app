@@ -1,0 +1,8 @@
+node_modules/
+dist/
+coverage/
+.gocache/
+*-server.*.log
+*.tsbuildinfo
+.env
+.DS_Store

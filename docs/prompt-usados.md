@@ -329,3 +329,25 @@ Mantén `SKILL.md` breve, usa instrucciones en español y elimina archivos de ej
 
 Valida la Skill al finalizar.
 ```
+
+## Prompt 6
+
+```text
+Usa la Skill `feature-implementer` para generar el scaffolding inicial del proyecto conforme a la documentación existente.
+
+Crea:
+
+* `frontend/` con React, TypeScript y Vite;
+* `backend/` con Go;
+* endpoint `GET /health`;
+* configuración base de pruebas;
+* Dockerfiles para frontend y backend;
+* `docker-compose.yml`;
+* variables de entorno de ejemplo cuando sean necesarias.
+
+El frontend debe quedar preparado para consumir el backend mediante `VITE_API_BASE_URL`.
+
+El backend debe leer el puerto desde `PORT`, responder JSON desde `/health` e incluir una prueba del endpoint.
+
+No implementes todavía las operaciones de la calculadora ni la UI final.
+```
