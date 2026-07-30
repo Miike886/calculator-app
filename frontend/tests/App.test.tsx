@@ -12,6 +12,7 @@ describe('App', () => {
 
     expect(screen.getByTestId('expression-display')).toHaveTextContent('0')
     expect(screen.getByTestId('result-display')).toHaveTextContent('0')
+    expect(screen.getByTestId('display-message')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: '7' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Punto decimal' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Calcular' })).toBeInTheDocument()
@@ -87,7 +88,8 @@ describe('App', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Calcular' }))
 
     await waitFor(() => {
-      expect(screen.getByRole('alert')).toHaveTextContent('La operacion no esta soportada en esta version.')
+      expect(screen.getByTestId('result-display')).toHaveTextContent('Error')
+      expect(screen.getByRole('alert')).toHaveTextContent('No fue posible realizar el cálculo')
     })
 
     expect(globalThis.fetch).toHaveBeenCalledWith(
@@ -98,13 +100,46 @@ describe('App', () => {
     )
   })
 
-  it('shows a local validation error for incomplete expressions', () => {
+  it('shows a local validation error for incomplete expressions', async () => {
     render(<App />)
 
     fireEvent.click(screen.getByRole('button', { name: '1' }))
     fireEvent.click(screen.getByRole('button', { name: 'Sumar' }))
     fireEvent.click(screen.getByRole('button', { name: 'Calcular' }))
 
-    expect(screen.getByRole('alert')).toHaveTextContent('Completa la expresion antes de calcular.')
+    await waitFor(() => {
+      expect(screen.getByTestId('expression-display')).toHaveTextContent('1+')
+      expect(screen.getByTestId('result-display')).toHaveTextContent('Error')
+      expect(screen.getByRole('alert')).toHaveTextContent('Completa la operación')
+    })
+  })
+
+  it('clears errors when the user continues editing', async () => {
+    vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce({
+      ok: false,
+      json: async () => ({
+        error: {
+          message: 'La operacion no esta soportada en esta version.',
+        },
+      }),
+    } as Response)
+
+    render(<App />)
+
+    fireEvent.click(screen.getByRole('button', { name: '6' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Multiplicar' }))
+    fireEvent.click(screen.getByRole('button', { name: '7' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Calcular' }))
+
+    await waitFor(() => {
+      expect(screen.getByTestId('result-display')).toHaveTextContent('Error')
+    })
+
+    fireEvent.click(screen.getByRole('button', { name: 'Eliminar ultimo caracter' }))
+
+    await waitFor(() => {
+      expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+      expect(screen.getByTestId('result-display')).toHaveTextContent('0')
+    })
   })
 })

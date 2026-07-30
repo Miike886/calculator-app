@@ -418,3 +418,41 @@ Los clics y las teclas deben utilizar la misma lógica de estado. Al presionar `
 No agregues todavía potencia, raíz cuadrada ni porcentaje.
 Usa el asset de referencia como referencia visual
 ```
+
+## Prompt 10
+
+```text
+Usa la Skill `feature-implementer` para mejorar la presentación de errores de la calculadora sin modificar su diseño general.
+
+Integra los errores dentro del display superior en lugar de mostrarlos en un bloque separado debajo del teclado.
+
+Cuando ocurra un error:
+
+- conserva la expresión actual en la parte superior del display;
+- muestra `Error` en el área principal del resultado;
+- muestra debajo un mensaje breve y claro;
+- aplica un estado visual de error discreto dentro del display;
+- no cambies el tamaño general de la calculadora;
+- no provoques saltos de layout.
+
+Usa mensajes breves, por ejemplo:
+
+- `Completa la operación`
+- `No se puede dividir entre cero`
+- `Ingresa un número válido`
+- `No fue posible realizar el cálculo`
+
+El error debe limpiarse cuando el usuario:
+
+- ingrese un nuevo número;
+- presione `DEL`;
+- presione `C`;
+- seleccione una nueva operación.
+
+Mantén accesibilidad mediante `role="alert"` o `aria-live`, sin depender únicamente del color.
+
+No modifiques el backend ni agregues nuevas operaciones.
+
+Agrega este prompt a `docs/prompts-usados.md`.
+No hagas commits ni modifiques ramas.
+```

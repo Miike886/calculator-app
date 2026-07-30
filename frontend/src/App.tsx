@@ -51,6 +51,24 @@ function lastCharacter(expression: string) {
   return expression[expression.length - 1] ?? ''
 }
 
+function getDisplayError(message: string) {
+  const normalizedMessage = message.toLowerCase()
+
+  if (normalizedMessage.includes('cero')) {
+    return 'No se puede dividir entre cero'
+  }
+
+  if (normalizedMessage.includes('operacion') || normalizedMessage.includes('operación')) {
+    return 'No fue posible realizar el cálculo'
+  }
+
+  if (normalizedMessage.includes('numero') || normalizedMessage.includes('número') || normalizedMessage.includes('operando')) {
+    return 'Ingresa un número válido'
+  }
+
+  return 'No fue posible realizar el cálculo'
+}
+
 export function App() {
   const [expression, setExpression] = useState('')
   const [result, setResult] = useState<number | null>(null)
@@ -59,6 +77,10 @@ export function App() {
 
   const displayExpression = expression || '0'
   const displayResult = useMemo(() => {
+    if (error) {
+      return 'Error'
+    }
+
     if (isSubmitting) {
       return 'Calculando...'
     }
@@ -68,7 +90,7 @@ export function App() {
     }
 
     return '0'
-  }, [isSubmitting, result])
+  }, [error, isSubmitting, result])
 
   const appendInput = useCallback((value: string) => {
     setError('')
@@ -115,7 +137,7 @@ export function App() {
     const lastInput = lastCharacter(expression)
     if (!expression || isOperator(lastInput) || lastInput === '.') {
       setResult(null)
-      setError('Completa la expresion antes de calcular.')
+      setError('Completa la operación')
       return
     }
 
@@ -127,7 +149,11 @@ export function App() {
       const response = await calculateExpression(normalizeExpression(expression))
       setResult(response.result)
     } catch (calculationError) {
-      setError(calculationError instanceof Error ? calculationError.message : 'No se pudo calcular la expresion.')
+      setError(
+        calculationError instanceof Error
+          ? getDisplayError(calculationError.message)
+          : 'No fue posible realizar el cálculo',
+      )
     } finally {
       setIsSubmitting(false)
     }
@@ -194,13 +220,16 @@ export function App() {
           Calculator App
         </h1>
 
-        <div className="calculator-display" aria-live="polite">
+        <div className={`calculator-display${error ? ' calculator-display-error' : ''}`} aria-live="polite">
           <span className="expression-line" data-testid="expression-display">
             {displayExpression}
           </span>
           <strong className="result-line" data-testid="result-display">
             {displayResult}
           </strong>
+          <span className="display-message" data-testid="display-message" role={error ? 'alert' : undefined}>
+            {error || (isSubmitting ? 'Procesando operación' : '\u00a0')}
+          </span>
         </div>
 
         <div className="keypad" aria-label="Calculadora">
@@ -221,12 +250,6 @@ export function App() {
             ),
           )}
         </div>
-
-        {error ? (
-          <p className="error-message" role="alert">
-            {error}
-          </p>
-        ) : null}
       </section>
     </main>
   )
