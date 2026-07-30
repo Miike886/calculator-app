@@ -1,0 +1,4 @@
+interface:
+  display_name: "Software Architect"
+  short_description: "Analiza cambios antes de implementar"
+  default_prompt: "Use $software-architect para analizar un nuevo requerimiento antes de implementarlo."

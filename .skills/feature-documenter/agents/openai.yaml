@@ -1,0 +1,4 @@
+interface:
+  display_name: "Feature Documenter"
+  short_description: "Documenta features con evidencia verificable"
+  default_prompt: "Use $feature-documenter para documentar una feature con evidencia de codigo, pruebas y validaciones."

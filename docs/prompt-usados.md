@@ -42,3 +42,290 @@ Restricciones:
 - no agregues dependencias sin necesidad
 - distingue claramente entre requisitos obligatorios, opcionales y recomendaciones
 ```
+
+## Prompt 2
+
+```text
+[$skill-creator](C:\Users\s2g51\.codex\skills\.system\skill-creator\SKILL.md) 
+Crea una Skill reutilizable llamada `software-architect` en:
+
+`.skills/software-architect`
+
+ 
+
+Su función será analizar nuevos requerimientos o features antes de su implementación. Debe:
+
+* leer primero la documentación existente del repositorio;
+* verificar que el cambio sea compatible con la arquitectura aprobada;
+* identificar impacto en frontend, backend, API, datos, seguridad, pruebas y documentación;
+* definir criterios de aceptación verificables;
+* proponer la solución mínima necesaria;
+* detectar sobreingeniería, contradicciones, supuestos y decisiones pendientes;
+* crear o actualizar especificaciones o decisiones técnicas solo cuando sea necesario;
+* no implementar código de aplicación.
+
+Debe considerar como fuente de verdad los archivos disponibles, especialmente:
+
+* `docs/specification.md`
+* `docs/architecture.md`
+* `docs/ui-specification.md`
+* `docs/features/`
+* contratos de API y ADRs existentes.
+
+Crea únicamente:
+
+* `SKILL.md`
+* `agents/openai.yaml`
+* las referencias mínimas que realmente sean necesarias.
+
+Mantén `SKILL.md` breve, usa instrucciones en español y elimina archivos de ejemplo innecesarios.
+
+Valida la Skill al finalizar.
+```
+
+## Prompt 3
+
+```text
+[$skill-creator](C:\Users\s2g51\.codex\skills\.system\skill-creator\SKILL.md) Crea una Skill reutilizable llamada `feature-implementer` en: 
+
+`.skills/feature-implementer`
+
+Su función será implementar nuevas features, correcciones o mejoras de forma incremental, manteniendo el proyecto operable, escalable y fácil de extender.
+
+Antes de modificar código debe:
+
+* leer la documentación y las instrucciones existentes del repositorio;
+* revisar los criterios de aceptación de la feature;
+* identificar impacto en frontend, backend, API, pruebas y documentación;
+* detectar conflictos con la arquitectura aprobada;
+* revisar implementaciones similares antes de crear nuevos patrones.
+
+Durante la implementación debe:
+
+* trabajar mediante cambios verticales pequeños y funcionales;
+* implementar únicamente lo necesario para cumplir el requerimiento;
+* respetar la separación de responsabilidades existente;
+* reutilizar componentes, servicios y patrones actuales;
+* evitar refactors, dependencias y abstracciones no relacionadas;
+* mantener compatibilidad con contratos existentes, salvo que el cambio haya sido aprobado;
+* incluir validación de entradas y manejo de errores;
+* agregar o actualizar pruebas de casos exitosos, inválidos y casos límite;
+* actualizar contratos de API y documentación cuando cambie el comportamiento;
+* no eliminar ni debilitar pruebas para hacer pasar una implementación.
+
+Al finalizar debe:
+
+* ejecutar los comandos aplicables de formato, lint, type checking, tests y build;
+* corregir fallos introducidos por el cambio;
+* reportar archivos modificados, decisiones tomadas, comandos ejecutados y resultados;
+* indicar limitaciones, riesgos o trabajo pendiente;
+* no afirmar que una validación pasó si no fue ejecutada;
+* dejar el cambio listo para un commit y una pull request enfocados.
+
+Debe considerar como fuente de verdad los archivos disponibles, especialmente:
+
+* `AGENTS.md`
+* `README.md`
+* `CONTRIBUTING.md`
+* `docs/specification.md`
+* `docs/architecture.md`
+* `docs/ui-specification.md`
+* `docs/features/`
+* contratos de API;
+* código, pruebas y configuración existentes.
+
+Si el requerimiento contradice la arquitectura o no tiene criterios de aceptación suficientes, debe reportarlo antes de introducir una decisión arbitraria.
+
+Crea únicamente:
+
+* `SKILL.md`
+* `agents/openai.yaml`
+* las referencias mínimas que realmente sean necesarias.
+
+Mantén `SKILL.md` breve, usa instrucciones en español y elimina archivos de ejemplo innecesarios.
+
+Valida la Skill al finalizar.
+```
+
+## Prompt 4
+
+```text
+[$skill-creator](C:\Users\s2g51\.codex\skills\.system\skill-creator\SKILL.md) 
+Crea una Skill reutilizable llamada `feature-documenter` en:
+
+`.skills/feature-documenter`
+
+Su función será documentar cada feature de forma consistente, verificable y útil para futuros desarrolladores.
+
+Antes de documentar debe:
+
+* leer la especificación, arquitectura y documentación existente;
+* revisar la implementación real, las pruebas y los cambios realizados;
+* identificar el comportamiento visible de la feature;
+* distinguir entre funcionalidad completada, pendiente y fuera de alcance;
+* evitar documentar como terminado algo que no esté respaldado por código, pruebas o validaciones.
+
+Por cada feature debe crear o actualizar un documento dentro de:
+
+`docs/features/`
+
+Cada documento debe incluir, cuando aplique:
+
+* identificador y nombre de la feature;
+* objetivo;
+* estado;
+* comportamiento implementado;
+* criterios de aceptación;
+* componentes y archivos afectados;
+* impacto en frontend, backend, API, datos y seguridad;
+* validaciones y manejo de errores;
+* pruebas agregadas o modificadas;
+* comandos de validación ejecutados y sus resultados;
+* decisiones técnicas;
+* limitaciones conocidas;
+* consideraciones de mantenimiento;
+* posibles mejoras futuras.
+
+También debe mantener actualizado:
+
+`docs/features/README.md`
+
+Este archivo debe funcionar como índice de features e incluir al menos:
+
+* identificador;
+* nombre;
+* estado;
+* impacto en API;
+* estado de pruebas;
+* enlace al documento correspondiente.
+
+Debe considerar como fuente de verdad los archivos disponibles, especialmente:
+
+* `docs/specification.md`
+* `docs/architecture.md`
+* `docs/ui-specification.md`
+* `docs/features/`
+* contratos de API;
+* código y pruebas existentes;
+* resultados reales de validación.
+
+Debe usar lenguaje claro, evitar copiar bloques grandes de código y no inventar resultados de pruebas o comandos.
+
+Crea únicamente:
+
+* `SKILL.md`
+* `agents/openai.yaml`
+* las referencias mínimas que realmente sean necesarias.
+
+Mantén `SKILL.md` breve, usa instrucciones en español y elimina archivos de ejemplo innecesarios.
+
+Valida la Skill al finalizar.
+```
+
+## Prompt 5
+
+```text
+[$skill-creator](C:\Users\s2g51\.codex\skills\.system\skill-creator\SKILL.md) 
+Crea una Skill reutilizable llamada `quality-gate` en:
+
+`.skills/quality-gate`
+
+Su función será validar si un cambio está listo para commit, pull request o merge.
+
+Antes de ejecutar validaciones debe:
+
+* leer las instrucciones y configuración del repositorio;
+* identificar los comandos reales definidos por el proyecto;
+* revisar los criterios de aceptación de la feature;
+* inspeccionar los archivos modificados y el alcance del cambio;
+* evitar asumir herramientas o comandos que no estén configurados;
+* identificar qué tipos de pruebas aplican según el riesgo y las capas afectadas.
+
+Debe ejecutar, cuando aplique:
+
+* formato;
+* lint;
+* type checking;
+* análisis estático;
+* pruebas unitarias;
+* pruebas de componentes;
+* pruebas de handlers o controladores;
+* pruebas de integración;
+* pruebas de contrato para APIs;
+* pruebas end-to-end;
+* pruebas de regresión;
+* cobertura;
+* build de producción;
+* validación de contratos de API;
+* build de contenedores;
+* revisión de documentación.
+
+Si faltan pruebas necesarias, debe generarlas o indicar claramente qué pruebas deben agregarse antes de aprobar el cambio.
+
+Debe evaluar, cuando aplique:
+
+* cobertura unitaria de la lógica nueva;
+* pruebas de componentes para cambios de UI;
+* pruebas de integración para interacciones entre capas;
+* pruebas de contrato para cambios de API;
+* pruebas end-to-end para flujos críticos;
+* pruebas de regresión para errores corregidos;
+* casos exitosos, inválidos, límites y errores esperados.
+
+No debe exigir todos los tipos de pruebas en cada cambio. Debe justificar cuáles aplican y cuáles no, según el comportamiento modificado, el riesgo y la arquitectura.
+
+También debe revisar el diff para detectar:
+
+* cambios no relacionados;
+* código duplicado o sin uso;
+* dependencias innecesarias;
+* validaciones faltantes;
+* errores sin manejar;
+* pruebas faltantes, triviales, duplicadas o debilitadas;
+* cambios incompatibles en la API;
+* documentación desactualizada;
+* secretos, credenciales o código de depuración;
+* alcance excesivo.
+
+Al finalizar debe devolver uno de estos resultados:
+
+* `PASS`: todas las validaciones requeridas fueron exitosas;
+* `PASS WITH WARNINGS`: las validaciones pasaron, pero existen observaciones no bloqueantes;
+* `FAIL`: existe al menos un fallo bloqueante, faltan pruebas necesarias o una validación requerida no pudo comprobarse.
+
+El reporte debe indicar:
+
+* comando o revisión realizada;
+* resultado;
+* resumen del error o advertencia;
+* si bloquea el commit, pull request o merge;
+* pruebas generadas o faltantes;
+* acciones recomendadas para corregirlo.
+
+Debe considerar como fuente de verdad los archivos disponibles, especialmente:
+
+* `AGENTS.md`
+* `README.md`
+* `CONTRIBUTING.md`
+* `docs/specification.md`
+* `docs/architecture.md`
+* `docs/ui-specification.md`
+* `docs/features/`
+* contratos de API;
+* configuración de CI;
+* archivos de dependencias, build y pruebas.
+
+No debe afirmar que una validación pasó si no fue ejecutada, ocultar fallos, desactivar pruebas, reducir cobertura ni modificar requisitos para obtener un resultado exitoso.
+
+No debe crear commits, abrir pull requests ni realizar merges salvo que se le solicite explícitamente.
+
+Crea únicamente:
+
+* `SKILL.md`
+* `agents/openai.yaml`
+* las referencias mínimas que realmente sean necesarias.
+
+Mantén `SKILL.md` breve, usa instrucciones en español y elimina archivos de ejemplo innecesarios.
+
+Valida la Skill al finalizar.
+```

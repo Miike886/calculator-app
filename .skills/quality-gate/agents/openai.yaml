@@ -1,0 +1,4 @@
+interface:
+  display_name: "Quality Gate"
+  short_description: "Valida cambios antes de commit o merge"
+  default_prompt: "Use $quality-gate para validar si un cambio esta listo para commit, pull request o merge."
