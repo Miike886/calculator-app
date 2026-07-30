@@ -1,5 +1,14 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { calculateExpression } from './api/calculations'
+import {
+  MAX_EXPRESSION_LENGTH,
+  appendInput as appendCalculatorInput,
+  formatCalculatorNumber,
+  isOperator,
+  isWithinExpressionLimit,
+  lastCharacter,
+  normalizeExpression,
+} from './calculator'
 
 type ButtonConfig = {
   label: string
@@ -31,26 +40,6 @@ const buttons: ButtonConfig[] = [
   { label: '=', action: 'equals', kind: 'equals', ariaLabel: 'Calcular' },
 ]
 
-const operators = ['+', '−', '×', '÷']
-
-function normalizeExpression(expression: string) {
-  return expression.replace(/×/g, '*').replace(/÷/g, '/').replace(/−/g, '-')
-}
-
-function isOperator(value: string) {
-  return operators.includes(value)
-}
-
-function canAppendDecimal(expression: string) {
-  const parts = expression.split(/[+−×÷]/)
-  const currentNumber = parts[parts.length - 1] ?? ''
-  return currentNumber !== '' && !currentNumber.includes('.')
-}
-
-function lastCharacter(expression: string) {
-  return expression[expression.length - 1] ?? ''
-}
-
 function getDisplayError(message: string) {
   const normalizedMessage = message.toLowerCase()
 
@@ -74,8 +63,11 @@ export function App() {
   const [result, setResult] = useState<number | null>(null)
   const [error, setError] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const expressionDisplayRef = useRef<HTMLSpanElement>(null)
+  const resultDisplayRef = useRef<HTMLElement>(null)
 
   const displayExpression = expression || '0'
+  const expressionLimitText = `${expression.length}/${MAX_EXPRESSION_LENGTH}`
   const displayResult = useMemo(() => {
     if (error) {
       return 'Error'
@@ -86,36 +78,39 @@ export function App() {
     }
 
     if (result !== null) {
-      return String(result)
+      return formatCalculatorNumber(result)
     }
 
     return '0'
   }, [error, isSubmitting, result])
 
-  const appendInput = useCallback((value: string) => {
-    setError('')
-    setResult(null)
-    setExpression((current) => {
-      if (/^\d$/.test(value)) {
-        return current === '0' ? value : `${current}${value}`
-      }
+  const appendInput = useCallback(
+    (value: string) => {
+      const hasResult = result !== null
 
-      if (value === '.') {
-        return canAppendDecimal(current) ? `${current}.` : current
-      }
+      setError('')
+      setResult(null)
+      setExpression((current) => {
+        const nextState = appendCalculatorInput(current, hasResult ? result : null, value)
+        setError(nextState.error)
+        return nextState.expression
+      })
+    },
+    [result],
+  )
 
-      if (isOperator(value)) {
-        const lastInput = lastCharacter(current)
-        if (current === '' || isOperator(lastInput) || lastInput === '.') {
-          return current
-        }
+  useEffect(() => {
+    const expressionDisplay = expressionDisplayRef.current
+    const resultDisplay = resultDisplayRef.current
 
-        return `${current}${value}`
-      }
+    if (expressionDisplay) {
+      expressionDisplay.scrollLeft = expressionDisplay.scrollWidth
+    }
 
-      return current
-    })
-  }, [])
+    if (resultDisplay) {
+      resultDisplay.scrollLeft = resultDisplay.scrollWidth
+    }
+  }, [displayExpression, displayResult])
 
   const clearAll = useCallback(() => {
     setExpression('')
@@ -138,6 +133,12 @@ export function App() {
     if (!expression || isOperator(lastInput) || lastInput === '.') {
       setResult(null)
       setError('Completa la operación')
+      return
+    }
+
+    if (!isWithinExpressionLimit(expression)) {
+      setResult(null)
+      setError(`Máximo ${MAX_EXPRESSION_LENGTH} caracteres`)
       return
     }
 
@@ -221,14 +222,14 @@ export function App() {
         </h1>
 
         <div className={`calculator-display${error ? ' calculator-display-error' : ''}`} aria-live="polite">
-          <span className="expression-line" data-testid="expression-display">
+          <span className="expression-line" data-testid="expression-display" ref={expressionDisplayRef}>
             {displayExpression}
           </span>
-          <strong className="result-line" data-testid="result-display">
+          <strong className="result-line" data-testid="result-display" ref={resultDisplayRef}>
             {displayResult}
           </strong>
           <span className="display-message" data-testid="display-message" role={error ? 'alert' : undefined}>
-            {error || (isSubmitting ? 'Procesando operación' : '\u00a0')}
+            {error || (isSubmitting ? 'Procesando operación' : expressionLimitText)}
           </span>
         </div>
 

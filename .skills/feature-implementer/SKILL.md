@@ -30,6 +30,7 @@ description: "Implementacion incremental de nuevas features, correcciones o mejo
 - Mantener compatibilidad con contratos existentes, salvo aprobacion explicita.
 - Incluir validacion de entradas y manejo de errores donde aplique.
 - Cubrir casos exitosos, invalidos y limite con pruebas nuevas o actualizadas.
+- Mantener las pruebas separadas por capa y comportamiento; dividir suites cuando mezclen responsabilidades o se vuelvan dificiles de leer.
 - Actualizar contratos de API y documentacion cuando cambie el comportamiento.
 - Preservar cambios ajenos existentes en el workspace.
 
@@ -55,6 +56,8 @@ Evaluar si la estrategia de pruebas es suficiente para el cambio, no solo si las
 - casos exitosos, invalidos, limites y errores esperados
 
 No exigir todos los tipos de pruebas en cada cambio. Justificar cuales aplican segun riesgo, comportamiento modificado y arquitectura del repositorio.
+
+Si la documentacion del repositorio exige una capa de pruebas, por ejemplo e2e, la Skill debe verificar que exista configuracion ejecutable y al menos cobertura de los flujos criticos afectados. Si falta, debe crearla o marcar `FAIL` con acciones concretas.
 
 Marcar la feature como `FAIL` si faltan pruebas necesarias para un comportamiento critico, aunque las pruebas existentes pasen.
 

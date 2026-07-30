@@ -8,27 +8,44 @@ import (
 	"testing"
 )
 
-func TestCalculationsHandlerAddsTwoOperands(t *testing.T) {
-	request := httptest.NewRequest(http.MethodPost, "/api/v1/calculations", bytes.NewBufferString(`{"expression":"2+3"}`))
-	response := httptest.NewRecorder()
-
-	CalculationsHandler(response, request)
-
-	if response.Code != http.StatusOK {
-		t.Fatalf("expected status %d, got %d", http.StatusOK, response.Code)
+func TestCalculationsHandlerCalculatesBasicOperations(t *testing.T) {
+	tests := []struct {
+		name       string
+		expression string
+		expected   float64
+	}{
+		{name: "addition", expression: "2+3+4", expected: 9},
+		{name: "subtraction", expression: "20-5-3", expected: 12},
+		{name: "multiplication", expression: "2*3*4", expected: 24},
+		{name: "division", expression: "100/2/5", expected: 10},
+		{name: "division with negative divisor", expression: "100/-2/5", expected: -10},
+		{name: "left to right", expression: "2+3*4", expected: 20},
 	}
 
-	var body calculationResponse
-	if err := json.NewDecoder(response.Body).Decode(&body); err != nil {
-		t.Fatalf("expected valid JSON response: %v", err)
-	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			request := httptest.NewRequest(http.MethodPost, "/api/v1/calculations", bytes.NewBufferString(`{"expression":"`+test.expression+`"}`))
+			response := httptest.NewRecorder()
 
-	if body.Expression != "2+3" {
-		t.Fatalf("expected expression 2+3, got %q", body.Expression)
-	}
+			CalculationsHandler(response, request)
 
-	if body.Result != 5 {
-		t.Fatalf("expected result 5, got %v", body.Result)
+			if response.Code != http.StatusOK {
+				t.Fatalf("expected status %d, got %d", http.StatusOK, response.Code)
+			}
+
+			var body calculationResponse
+			if err := json.NewDecoder(response.Body).Decode(&body); err != nil {
+				t.Fatalf("expected valid JSON response: %v", err)
+			}
+
+			if body.Expression != test.expression {
+				t.Fatalf("expected expression %s, got %q", test.expression, body.Expression)
+			}
+
+			if body.Result != test.expected {
+				t.Fatalf("expected result %v, got %v", test.expected, body.Result)
+			}
+		})
 	}
 }
 
@@ -42,12 +59,21 @@ func TestCalculationsHandlerRejectsInvalidJSON(t *testing.T) {
 }
 
 func TestCalculationsHandlerRejectsUnsupportedOperation(t *testing.T) {
-	request := httptest.NewRequest(http.MethodPost, "/api/v1/calculations", bytes.NewBufferString(`{"expression":"2*3"}`))
+	request := httptest.NewRequest(http.MethodPost, "/api/v1/calculations", bytes.NewBufferString(`{"expression":"2^3"}`))
 	response := httptest.NewRecorder()
 
 	CalculationsHandler(response, request)
 
 	assertErrorCode(t, response, http.StatusBadRequest, "UNSUPPORTED_OPERATION")
+}
+
+func TestCalculationsHandlerRejectsInvalidCharacter(t *testing.T) {
+	request := httptest.NewRequest(http.MethodPost, "/api/v1/calculations", bytes.NewBufferString(`{"expression":"2a3"}`))
+	response := httptest.NewRecorder()
+
+	CalculationsHandler(response, request)
+
+	assertErrorCode(t, response, http.StatusBadRequest, "INVALID_CHARACTER")
 }
 
 func TestCalculationsHandlerRejectsEmptyExpression(t *testing.T) {
@@ -57,6 +83,24 @@ func TestCalculationsHandlerRejectsEmptyExpression(t *testing.T) {
 	CalculationsHandler(response, request)
 
 	assertErrorCode(t, response, http.StatusBadRequest, "EMPTY_EXPRESSION")
+}
+
+func TestCalculationsHandlerRejectsExpressionOverMaxLength(t *testing.T) {
+	request := httptest.NewRequest(http.MethodPost, "/api/v1/calculations", bytes.NewBufferString(`{"expression":"1234567890123456789012345678901234567890123456789+1"}`))
+	response := httptest.NewRecorder()
+
+	CalculationsHandler(response, request)
+
+	assertErrorCode(t, response, http.StatusBadRequest, "EXPRESSION_TOO_LONG")
+}
+
+func TestCalculationsHandlerRejectsDivisionByZero(t *testing.T) {
+	request := httptest.NewRequest(http.MethodPost, "/api/v1/calculations", bytes.NewBufferString(`{"expression":"10/0"}`))
+	response := httptest.NewRecorder()
+
+	CalculationsHandler(response, request)
+
+	assertErrorCode(t, response, http.StatusBadRequest, "DIVISION_BY_ZERO")
 }
 
 func assertErrorCode(t *testing.T, response *httptest.ResponseRecorder, expectedStatus int, expectedCode string) {

@@ -66,6 +66,10 @@ El punto decimal `.` queda como recomendacion si se decide soportar decimales de
 - La expresion enviada debe permanecer visible.
 - El resultado debe mostrarse de forma destacada.
 - La UI debe permitir iniciar una nueva operacion.
+- Si el usuario selecciona un operador despues de un resultado, el resultado debe usarse como primer operando.
+- Si el usuario escribe un numero despues de un resultado, debe iniciar una operacion nueva.
+- Si la expresion o el resultado exceden el ancho disponible, el display debe permitir revisar el contenido sin cambiar el tamano de la calculadora.
+- El display debe mostrar un contador compacto de caracteres de la expresion actual.
 
 ### Error
 
@@ -106,11 +110,16 @@ El punto decimal `.` queda como recomendacion si se decide soportar decimales de
 - No permitir caracteres no soportados por la primera version.
 - No enviar expresiones vacias al backend.
 - No enviar expresiones que terminen en operador.
+- No permitir que la expresion supere 48 caracteres.
 - No permitir que `DEL` produzca un estado invalido visualmente; si no quedan caracteres, volver al estado inicial.
 
 ### Recomendadas
 
 - Prevenir operadores consecutivos desde la UI.
+- Permitir reemplazar el operador pendiente si aun no se ingreso el siguiente operando.
+- Al reemplazar un operador pendiente, no debe conservarse una secuencia previa de operadores.
+- Permitir `-` como signo negativo al inicio de la expresion o despues de multiplicacion/division.
+- Al ingresar `.` al inicio de un operando, mostrar `0.` para que el punto sea visible y el numero siga siendo valido.
 - Mostrar feedback visual cuando una tecla o boton no sea aplicable.
 - Mantener botones con tamano estable para evitar saltos de layout.
 - Usar `aria-label` en botones para accesibilidad.
@@ -145,7 +154,10 @@ Cada boton debe contemplar:
 - La expresion actual debe mostrarse en una linea secundaria.
 - El resultado debe mostrarse con mayor jerarquia visual.
 - Si el resultado es largo, debe evitar romper el layout.
+- Si la expresion o el resultado son largos, deben conservarse completos mediante desplazamiento horizontal.
+- Los resultados usados para continuar una operacion deben mostrarse como numero decimal compatible con el parser, no en notacion cientifica.
 - El contenido de pantalla debe alinearse de forma consistente, preferentemente a la derecha como en calculadoras tradicionales.
+- El display no debe mostrar barras de desplazamiento vertical.
 
 ## Casos UI a probar
 
