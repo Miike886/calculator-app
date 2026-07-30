@@ -379,3 +379,42 @@ No implementes todavía todas las operaciones ni la UI visual completa. Primero 
 
 React → REST API → Go → resultado → React
 ```
+
+## Prompt 9
+
+```text
+Usa la Skill `feature-implementer` para reemplazar la interfaz provisional por una calculadora visual interactiva, respetando `docs/ui-specification.md` y el asset de referencia adjunto.
+
+La imagen es una referencia para el estilo, proporciones y jerarquía visual. La siguiente distribución es la fuente de verdad funcional:
+
+┌─────┬─────┬─────┬─────┐
+│  C  │ DEL │     │  ÷  │
+├─────┼─────┼─────┼─────┤
+│  7  │  8  │  9  │  ×  │
+├─────┼─────┼─────┼─────┤
+│  4  │  5  │  6  │  −  │
+├─────┼─────┼─────┼─────┤
+│  1  │  2  │  3  │  +  │
+├─────┼─────┼─────┼─────┤
+│  0  │  .  │     │  =  │
+└─────┴─────┴─────┴─────┘
+
+Los espacios vacíos pueden usarse para extender los botones `C` y `0`, o conservarse según la composición visual más coherente.
+
+La interfaz debe incluir:
+
+- display para la expresión actual y el resultado;
+- botones clickeables del `0` al `9`;
+- punto decimal;
+- botones `C`, `DEL` y `=`;
+- suma, resta, multiplicación y división;
+- entrada mediante clic y teclado;
+- soporte para `Enter`, `Backspace` y `Escape`;
+- estados de carga, resultado y error;
+- diseño responsive utilizable desde 320 px.
+
+Los clics y las teclas deben utilizar la misma lógica de estado. Al presionar `=`, consume el endpoint existente del backend.
+
+No agregues todavía potencia, raíz cuadrada ni porcentaje.
+Usa el asset de referencia como referencia visual
+```
