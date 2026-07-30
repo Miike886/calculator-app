@@ -64,12 +64,21 @@ func writeCalculationError(w http.ResponseWriter, expression string, err error) 
 	case errors.Is(err, calculation.ErrEmptyExpression):
 		apiErr.Code = "EMPTY_EXPRESSION"
 		apiErr.Message = "La expresion no puede estar vacia."
+	case errors.Is(err, calculation.ErrExpressionTooLong):
+		apiErr.Code = "EXPRESSION_TOO_LONG"
+		apiErr.Message = "La expresion supera el limite permitido."
 	case errors.Is(err, calculation.ErrUnsupportedOperation):
 		apiErr.Code = "UNSUPPORTED_OPERATION"
 		apiErr.Message = "La operacion no esta soportada en esta version."
+	case errors.Is(err, calculation.ErrInvalidCharacter):
+		apiErr.Code = "INVALID_CHARACTER"
+		apiErr.Message = "La expresion contiene caracteres no permitidos."
 	case errors.Is(err, calculation.ErrInvalidExpression):
 		apiErr.Code = "INCOMPLETE_EXPRESSION"
 		apiErr.Message = "La expresion esta incompleta o contiene operandos invalidos."
+	case errors.Is(err, calculation.ErrDivisionByZero):
+		apiErr.Code = "DIVISION_BY_ZERO"
+		apiErr.Message = "No se puede dividir entre cero."
 	}
 
 	writeJSON(w, http.StatusBadRequest, errorResponse{Error: apiErr})

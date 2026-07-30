@@ -12,6 +12,7 @@ description: "Documentacion consistente, verificable y util de features implemen
 - Distinguir claramente completado, pendiente, fuera de alcance y recomendaciones.
 - No copiar bloques grandes de codigo.
 - No inventar resultados de pruebas, comandos ni validaciones.
+- Documentar la organizacion real de pruebas por capa cuando sea relevante, incluyendo `internal/<capa>/tests/` en backend si aplica.
 
 ## Flujo
 

@@ -27,29 +27,33 @@ calculator-app/
     architecture.md
     ui-specification.md
     prompt-usados.md
-  apps/
-    web/
-      src/
-      tests/
-      package.json
-      tsconfig.json
-      vite.config.ts
-  services/
-    calculator-api/
-      cmd/
-        api/
-      internal/
-        calculation/
-        transport/
-        validation/
-      tests/
-      go.mod
-  e2e/
+  frontend/
+    src/
     tests/
+      calculator.test.ts
+      app.<area>.test.tsx
+    e2e/
+      <flow>.spec.ts
+    package.json
+    tsconfig.json
+    vite.config.ts
+    playwright.config.ts
+  backend/
+    cmd/
+      api/
+    internal/
+      calculation/
+        tests/
+          *_test.go
+      transport/
+        tests/
+          *_test.go
+      config/
+    go.mod
   README.md
 ```
 
-Esta estructura es una propuesta inicial. No implica que deban crearse estos archivos durante la fase actual.
+La estructura efectiva usa `frontend/` y `backend/` para mantener el monorepo simple. Las pruebas e2e viven dentro de `frontend/e2e/` porque Playwright y sus servidores de prueba se configuran desde el paquete frontend. En backend, los tests viven en `tests/` dentro de cada capa para mantener separados los archivos de produccion y las suites de validacion.
 
 ## Responsabilidades del frontend
 
@@ -138,7 +142,7 @@ Response exitosa:
 ```json
 {
   "expression": "2+3*4",
-  "result": 14
+  "result": 20
 }
 ```
 
@@ -197,7 +201,7 @@ Logica de dominio.
 Responsabilidades:
 
 - parsear expresiones validas
-- aplicar precedencia aritmetica
+- evaluar expresiones lineales de izquierda a derecha
 - calcular resultados
 - detectar division entre cero
 
@@ -233,6 +237,16 @@ Responsabilidades:
 
 ## Estrategia de pruebas
 
+### Organizacion por capa
+
+Obligatoria:
+
+- Mantener los tests separados por capa: dominio backend, handlers HTTP, logica pura frontend, componentes React y e2e.
+- En backend, ubicar tests en `internal/<capa>/tests/` usando paquetes externos de prueba cuando sea posible, por ejemplo `calculation_test` y `transport_test`.
+- Evitar archivos de test genericos que mezclen render, entrada, API, errores y flujos completos.
+- Dividir suites por comportamiento cuando un archivo empiece a ser dificil de leer.
+- Mantener helpers de prueba pequenos y compartidos solo cuando reduzcan duplicacion real.
+
 ### Unitarias frontend
 
 Obligatorias:
@@ -256,7 +270,7 @@ Obligatorias:
 - Calculo de resta.
 - Calculo de multiplicacion.
 - Calculo de division.
-- Precedencia entre operadores.
+- Evaluacion de izquierda a derecha sin precedencia entre operadores distintos.
 - Division entre cero.
 - Serializacion de responses exitosas y errores.
 
@@ -270,6 +284,8 @@ Obligatorias:
 - Usuario borra con `Backspace` o `DEL`.
 - Usuario limpia con `Escape` o `C`.
 - Usuario recibe error al intentar dividir entre cero.
+
+Los comandos y alcance vigente de cada capa de pruebas se documentan en `docs/testing.md`.
 
 ## Variables de entorno
 
@@ -304,6 +320,7 @@ No se requieren variables para persistencia, autenticacion ni credenciales en es
 | Validacion ligera en frontend | Mejora UX sin reemplazar reglas del servidor. |
 | Separacion por capas en backend | Mejora mantenibilidad y testabilidad sin introducir complejidad excesiva. |
 | Pruebas desde el inicio | Reduce riesgo de regresiones en interacciones y reglas de calculo. |
+| Tests separados por capa y comportamiento | Mantiene legibilidad, evita suites monoliticas y facilita detectar brechas reales de cobertura. |
 
 ## Riesgos de sobreingenieria a evitar
 

@@ -79,11 +79,11 @@ Estas capacidades no pertenecen a la primera version, pero deben quedar contempl
 
 ## Comportamiento de operaciones
 
-- Las operaciones binarias deben evaluarse respetando precedencia aritmetica comun:
-  - multiplicacion y division antes que suma y resta
-  - evaluacion de izquierda a derecha para operadores con misma precedencia
+- Las operaciones binarias deben evaluarse en orden de captura, de izquierda a derecha.
+- No se debe aplicar precedencia matematica entre operadores distintos en esta version.
 - La division entre cero debe rechazarse con error estructurado.
 - Los numeros decimales deben permitirse si se define soporte de punto decimal en la UI. Para la primera version, se recomienda contemplarlo en la validacion aunque el teclado visual inicial pueda priorizar enteros.
+- Los numeros negativos deben aceptarse como operandos cuando el signo `-` aparece al inicio de la expresion o despues de un operador.
 - Los espacios en la expresion deben ser ignorados por el backend.
 - Una expresion enviada al backend debe representar una operacion completa, por ejemplo `12+7`, `8*3`, `20/5`.
 
@@ -94,15 +94,15 @@ Estas capacidades no pertenecen a la primera version, pero deben quedar contempl
 - La expresion no debe estar vacia.
 - La expresion solo debe contener caracteres permitidos para la version activa.
 - La expresion no debe terminar en un operador.
-- La expresion no debe comenzar con un operador binario, salvo que se defina explicitamente soporte para numeros negativos.
-- No deben permitirse dos operadores binarios consecutivos, salvo casos definidos para negativos.
+- La expresion puede comenzar con `-` cuando representa un numero negativo.
+- No deben permitirse dos operadores binarios consecutivos, salvo el signo `-` usado como parte de un numero negativo.
 - Division entre cero debe retornar error.
 - El backend debe rechazar operaciones no soportadas en la version actual.
 - El backend debe devolver `400 Bad Request` para entradas invalidas.
 
 ### Recomendadas
 
-- Definir una longitud maxima de expresion para evitar abuso accidental, por ejemplo 256 caracteres.
+- La expresion no debe superar 48 caracteres en la version visual actual.
 - Usar numeros de punto flotante con una politica clara de precision para resultados decimales.
 - Normalizar simbolos visuales antes de enviar al backend, por ejemplo convertir `x` a `*`.
 
@@ -113,9 +113,10 @@ Estas capacidades no pertenecen a la primera version, pero deben quedar contempl
 - Expresion terminada en operador: `12+`.
 - Expresion con operadores consecutivos: `12++3`.
 - Division entre cero: `10/0`.
+- Division con operandos negativos: `10/-2`, `-10/2`.
 - Numeros grandes.
 - Resultados decimales: `10/4`.
-- Multiples operaciones en una expresion: `2+3*4`.
+- Multiples operaciones en una expresion: `2+3*4`, evaluada como `(2+3)*4`.
 - Uso repetido de `DEL` hasta dejar la expresion vacia.
 - Uso de `C` despues de un calculo exitoso.
 - Presionar `=` con una expresion incompleta.
@@ -128,6 +129,7 @@ Estas capacidades no pertenecen a la primera version, pero deben quedar contempl
 | JSON invalido | 400 | `INVALID_JSON` | El cuerpo de la solicitud no es JSON valido. |
 | Expresion vacia | 400 | `EMPTY_EXPRESSION` | La expresion no puede estar vacia. |
 | Caracter no permitido | 400 | `INVALID_CHARACTER` | La expresion contiene caracteres no permitidos. |
+| Expresion demasiado larga | 400 | `EXPRESSION_TOO_LONG` | La expresion supera el limite permitido. |
 | Expresion incompleta | 400 | `INCOMPLETE_EXPRESSION` | La expresion esta incompleta. |
 | Operacion no soportada | 400 | `UNSUPPORTED_OPERATION` | La operacion no esta soportada en esta version. |
 | Division entre cero | 400 | `DIVISION_BY_ZERO` | No se puede dividir entre cero. |
@@ -154,7 +156,7 @@ Codigo HTTP: `200 OK`
 ```json
 {
   "expression": "12+7*2",
-  "result": 26
+  "result": 38
 }
 ```
 
@@ -239,6 +241,7 @@ Response:
 - El frontend llama a `POST /api/v1/calculations` para calcular.
 - `GET /health` retorna estado saludable del backend.
 - El backend calcula correctamente suma, resta, multiplicacion y division.
+- El backend calcula expresiones con dos o mas operandos de izquierda a derecha, sin precedencia entre operadores distintos.
 - El backend rechaza division entre cero.
 - El backend retorna errores estructurados.
 - Existen pruebas unitarias para logica critica de frontend y backend.

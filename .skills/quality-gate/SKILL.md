@@ -28,6 +28,8 @@ Ejecutar cuando aplique y exista comando o configuracion:
 
 Si faltan pruebas necesarias, generarlas cuando el alcance lo permita o indicar claramente que deben agregarse antes de aprobar.
 
+Cuando la arquitectura o especificacion declare pruebas obligatorias, esa capa pasa a ser requerida para el resultado. Por ejemplo, si el proyecto exige e2e, el gate debe confirmar configuracion, tests y ejecucion real; si no existen o no se ejecutan, el resultado debe ser `FAIL`.
+
 ## Suficiencia de pruebas
 
 No exigir todos los tipos de pruebas en cada cambio. Justificar cuales aplican y cuales no segun comportamiento modificado, riesgo y arquitectura.
@@ -41,6 +43,8 @@ Evaluar cuando aplique:
 - pruebas e2e para flujos criticos
 - pruebas de regresion para errores corregidos
 - casos exitosos, invalidos, limites y errores esperados
+- organizacion clara por capa y comportamiento, sin suites monoliticas que oculten brechas de cobertura
+- cumplimiento de la estructura de tests definida por la arquitectura, incluyendo `internal/<capa>/tests/` en backend cuando exista esa convencion
 
 ## Revision de diff
 

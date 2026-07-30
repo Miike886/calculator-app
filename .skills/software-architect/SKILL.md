@@ -14,6 +14,7 @@ description: Analisis arquitectonico previo a implementar nuevos requerimientos,
 - Distinguir requisitos obligatorios, opcionales y recomendaciones.
 - Preferir la solucion minima compatible con la arquitectura aprobada.
 - Evitar persistencia, dependencias, servicios, abstracciones o funcionalidades no solicitadas.
+- Mantener la estrategia de pruebas ordenada por capa y comportamiento; en backend respetar `internal/<capa>/tests/` cuando el repositorio use esa convencion.
 
 ## Flujo
 
@@ -26,8 +27,8 @@ description: Analisis arquitectonico previo a implementar nuevos requerimientos,
    - contrato de API
    - datos y persistencia
    - seguridad
-   - pruebas unitarias y e2e
-   - documentacion
+  - pruebas unitarias y e2e
+  - documentacion
 5. Detectar contradicciones, supuestos, decisiones pendientes y riesgos de sobreingenieria.
 6. Proponer la solucion minima necesaria, sin adelantar implementacion.
 7. Definir criterios de aceptacion verificables.

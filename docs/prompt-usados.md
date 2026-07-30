@@ -456,3 +456,72 @@ No modifiques el backend ni agregues nuevas operaciones.
 Agrega este prompt a `docs/prompts-usados.md`.
 No hagas commits ni modifiques ramas.
 ```
+
+## Prompt 11
+
+```text
+Usa la Skill `feature-implementer` para ampliar el flujo de cálculo actual.
+
+Implementa soporte para las operaciones básicas:
+
+- suma;
+- resta;
+- multiplicación;
+- división.
+
+La calculadora debe aceptar cadenas con múltiples operandos, por ejemplo:
+
+- `2 + 3 + 4`
+- `20 - 5 - 3`
+- `2 × 3 × 4`
+- `100 ÷ 2 ÷ 5`
+
+La evaluación debe seguir el orden de captura de la calculadora, sin implementar todavía precedencia matemática entre operadores distintos.
+
+Después de obtener un resultado, el usuario debe poder seleccionar otra operación y continuar usando ese resultado como primer operando.
+
+Ejemplo:
+
+- `5 + 5 = 10`
+- después `× 2 = 20`
+
+También debe permitir:
+
+- iniciar una nueva operación después de un resultado al escribir un número;
+- reemplazar la operación seleccionada si todavía no se ingresó el siguiente operando;
+- impedir operadores consecutivos invalidos;
+- manejar división entre cero;
+- conservar la integración actual entre frontend y backend;
+- mostrar errores dentro del display;
+- mantener soporte por clic y teclado.
+
+Actualiza el backend, frontend, contrato API y pruebas necesarias.
+
+No agregues todavía potencia, raíz cuadrada, porcentaje ni precedencia de operadores.
+
+Agrega este prompt a `docs/prompts-usados.md`.
+
+No hagas commits ni modifiques ramas.
+```
+
+## Prompt 12
+
+```text
+no veo claramente los tests que estás generando tanto para el backend como para el front, mismos que fueron mencionados explícitamente dentro de las skills. Es importante que tengamos test unitarios cubriendo todas las funcionalidades importantes, test e2e y todo lo necesario
+tanto para back, como para front. Revisa eso con la skill que corresponde y si es necesario modifícala para alinear todo esto
+```
+
+## Prompt 13
+
+```text
+Siento que las capas de test no están bien alineadas, hay muchas incosistencias, hay que alinear la arquitectura mpara mantener todo eso ordenado
+no sé cómo lo consideres, pero creo que es más organizado separar cada test en archivos diferentes, porque llega un punto en el que el archivo de test se vuelve ilegible
+```
+
+## Prompt 14
+
+```text
+aún así dentro del back siento que están un poco desacoplados los test. En transport se nota todo amontonado entre los archivos normales y los de test
+
+Alinea todos los skills y la nueva documentación con estos nuevos cambios
+```
