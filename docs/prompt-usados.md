@@ -351,3 +351,31 @@ El backend debe leer el puerto desde `PORT`, responder JSON desde `/health` e in
 
 No implementes todavía las operaciones de la calculadora ni la UI final.
 ```
+
+## Prompt 7
+
+```text
+Ejecuta quality-gate
+Documenta el scaffold con feature-documenter
+```
+
+## Prompt 8
+
+```text
+La siguiente feature debería ser un flujo completo mínimo:
+
+1. Definir POST /api/v1/calculations.
+2. Implementar suma en Go.
+3. Agregar unit tests de la lógica.
+4. Agregar tests del handler HTTP.
+5. Crear el cliente API en React.
+6. Implementar una UI mínima que envíe una suma.
+7. Mostrar resultado y errores.
+8. Agregar pruebas de frontend.
+9. Ejecutar quality-gate.
+10. Documentar la feature.
+
+No implementes todavía todas las operaciones ni la UI visual completa. Primero comprueba que el flujo:
+
+React → REST API → Go → resultado → React
+```

@@ -35,3 +35,56 @@ body {
 .scaffold-panel p {
   margin: 0 0 16px;
 }
+
+.sum-form {
+  display: grid;
+  gap: 12px;
+}
+
+.sum-form label {
+  display: grid;
+  font-size: 14px;
+  gap: 6px;
+}
+
+.sum-form input {
+  border: 1px solid #aab4bf;
+  border-radius: 6px;
+  font: inherit;
+  padding: 10px 12px;
+}
+
+.operator {
+  font-size: 24px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.sum-form button {
+  background: #1f6feb;
+  border: 0;
+  border-radius: 6px;
+  color: #ffffff;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  padding: 12px;
+}
+
+.sum-form button:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+.result-panel {
+  border-top: 1px solid #d8dee4;
+  display: grid;
+  gap: 8px;
+  margin-top: 20px;
+  padding-top: 16px;
+}
+
+.error-message {
+  color: #b42318;
+  font-weight: 700;
+}
