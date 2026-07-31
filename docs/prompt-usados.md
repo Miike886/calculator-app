@@ -577,27 +577,8 @@ Agrega este prompt a `docs/prompts-usados.md`.
 
 No hagas commits ni modifiques ramas.
 El borde derecho del delete y del "=" no está alineado con los demás
-```
 
 ## Prompt 14
-
-```text
-El límite de 48 caracteres es bastante, hay que reducirlo a algo realista y razonable
-```
-
-## Prompt 15
-
-```text
-la ui no tiene un controlador directo para navegar horizontalmente en el resultado, tenemos que ajustar eso ya sea restringiendo la cantidad de caracteres, o agregando navegación explícita de forma natural
-```
-
-## Prompt 16
-
-```text
-Asegúrate de manejar todas las excepciones, por ejemplo si un resultado sobrepasa el límite del tipo de dato
-```
-
-## Prompt 17
 
 ```text
 Usa la Skill `feature-implementer` para preparar el proyecto para su entrega final, respetando la documentación y configuración existentes.
@@ -631,7 +612,7 @@ Agrega este prompt a `docs/prompts-usados.md`.
 No hagas commits ni modifiques ramas.
 ```
 
-## Prompt 18
+## Prompt 15
 
 ```text
 Usa la Skill `feature-implementer` para agregar jerarquía de operaciones a la calculadora existente.
