@@ -182,4 +182,63 @@ describe('App calculation flow', () => {
     expect(screen.getByTestId('expression-display')).toHaveTextContent('9999999999999800000000000000+2')
     expect(screen.getByTestId('expression-display')).not.toHaveTextContent('e')
   })
+
+  it('submits power expressions and reuses the result', async () => {
+    vi.spyOn(globalThis, 'fetch')
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ expression: '2^3', result: 8 }),
+      } as Response)
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ expression: '8%50', result: 4 }),
+      } as Response)
+
+    render(<App />)
+
+    fireEvent.click(screen.getByRole('button', { name: '2' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Potencia' }))
+    fireEvent.click(screen.getByRole('button', { name: '3' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Calcular' }))
+
+    await waitFor(() => {
+      expect(screen.getByTestId('result-display')).toHaveTextContent('8')
+    })
+
+    fireEvent.click(screen.getByRole('button', { name: 'Porcentaje' }))
+    fireEvent.click(screen.getByRole('button', { name: '5' }))
+    fireEvent.click(screen.getByRole('button', { name: '0' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Calcular' }))
+
+    await waitFor(() => {
+      expect(screen.getByTestId('expression-display')).toHaveTextContent('8%50')
+      expect(screen.getByTestId('result-display')).toHaveTextContent('4')
+    })
+  })
+
+  it('submits square root as a unary operation', async () => {
+    vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ expression: 'sqrt(81)', result: 9 }),
+    } as Response)
+
+    render(<App />)
+
+    fireEvent.click(screen.getByRole('button', { name: '8' }))
+    fireEvent.click(screen.getByRole('button', { name: '1' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Raiz cuadrada' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Calcular' }))
+
+    await waitFor(() => {
+      expect(screen.getByTestId('expression-display')).toHaveTextContent('√(81)')
+      expect(screen.getByTestId('result-display')).toHaveTextContent('9')
+    })
+
+    expect(globalThis.fetch).toHaveBeenCalledWith(
+      expect.stringContaining('/api/v1/calculations'),
+      expect.objectContaining({
+        body: JSON.stringify({ expression: 'sqrt(81)' }),
+      }),
+    )
+  })
 })

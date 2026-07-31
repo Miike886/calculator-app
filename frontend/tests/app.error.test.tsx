@@ -85,4 +85,38 @@ describe('App error handling', () => {
       expect(screen.getByTestId('result-display')).toHaveTextContent('0')
     })
   })
+
+  it('shows a local validation error when square root has no operand', () => {
+    render(<App />)
+
+    fireEvent.click(screen.getByRole('button', { name: 'Raiz cuadrada' }))
+
+    expect(screen.getByTestId('result-display')).toHaveTextContent('Error')
+    expect(screen.getByRole('alert')).toHaveTextContent('Ingresa un número válido')
+  })
+
+  it('shows square root domain errors inside the display', async () => {
+    vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce({
+      ok: false,
+      json: async () => ({
+        error: {
+          code: 'NEGATIVE_SQUARE_ROOT',
+          message: 'No se puede calcular la raiz cuadrada de un numero negativo.',
+        },
+      }),
+    } as Response)
+
+    render(<App />)
+
+    fireEvent.click(screen.getByRole('button', { name: 'Restar' }))
+    fireEvent.click(screen.getByRole('button', { name: '9' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Raiz cuadrada' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Calcular' }))
+
+    await waitFor(() => {
+      expect(screen.getByTestId('expression-display')).toHaveTextContent('√(−9)')
+      expect(screen.getByTestId('result-display')).toHaveTextContent('Error')
+      expect(screen.getByRole('alert')).toHaveTextContent('Raíz inválida')
+    })
+  })
 })

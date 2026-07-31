@@ -1,5 +1,11 @@
 import { defineConfig, devices } from '@playwright/test'
 
+const backendPort = process.env.E2E_BACKEND_PORT ?? '18080'
+const frontendPort = process.env.E2E_FRONTEND_PORT ?? '5173'
+const backendURL = `http://127.0.0.1:${backendPort}`
+const frontendURL = `http://127.0.0.1:${frontendPort}`
+const reuseServers = process.env.PW_REUSE_SERVERS === 'true'
+
 export default defineConfig({
   testDir: './e2e',
   timeout: 30_000,
@@ -7,7 +13,7 @@ export default defineConfig({
     timeout: 5_000,
   },
   use: {
-    baseURL: 'http://127.0.0.1:5173',
+    baseURL: frontendURL,
     trace: 'on-first-retry',
   },
   webServer: [
@@ -15,20 +21,20 @@ export default defineConfig({
       command: '"C:\\Program Files\\Go\\bin\\go.exe" run ./cmd/api',
       cwd: '../backend',
       env: {
-        PORT: '18080',
+        PORT: backendPort,
       },
-      reuseExistingServer: !process.env.CI,
+      reuseExistingServer: reuseServers,
       timeout: 30_000,
-      url: 'http://127.0.0.1:18080/health',
+      url: `${backendURL}/health`,
     },
     {
-      command: 'npm run dev -- --host 127.0.0.1 --port 5173',
+      command: `npm run dev -- --host 127.0.0.1 --port ${frontendPort}`,
       env: {
-        VITE_API_BASE_URL: 'http://127.0.0.1:18080',
+        VITE_API_BASE_URL: backendURL,
       },
-      reuseExistingServer: !process.env.CI,
+      reuseExistingServer: reuseServers,
       timeout: 30_000,
-      url: 'http://127.0.0.1:5173',
+      url: frontendURL,
     },
   ],
   projects: [

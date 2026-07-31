@@ -20,24 +20,28 @@ type ButtonConfig = {
 const buttons: ButtonConfig[] = [
   { label: 'C', action: 'clear', kind: 'control', ariaLabel: 'Limpiar' },
   { label: 'DEL', action: 'delete', kind: 'control', ariaLabel: 'Eliminar ultimo caracter' },
-  { label: '', action: 'blank', kind: 'blank' },
+  { label: '√', action: '√', kind: 'operator', ariaLabel: 'Raiz cuadrada' },
   { label: '÷', action: '÷', kind: 'operator', ariaLabel: 'Dividir' },
+  { label: '^', action: '^', kind: 'operator', ariaLabel: 'Potencia' },
+  { label: '%', action: '%', kind: 'operator', ariaLabel: 'Porcentaje' },
+  { label: '', action: 'blank', kind: 'blank' },
+  { label: '×', action: '×', kind: 'operator', ariaLabel: 'Multiplicar' },
   { label: '7', action: '7' },
   { label: '8', action: '8' },
   { label: '9', action: '9' },
-  { label: '×', action: '×', kind: 'operator', ariaLabel: 'Multiplicar' },
+  { label: '−', action: '−', kind: 'operator', ariaLabel: 'Restar' },
   { label: '4', action: '4' },
   { label: '5', action: '5' },
   { label: '6', action: '6' },
-  { label: '−', action: '−', kind: 'operator', ariaLabel: 'Restar' },
+  { label: '+', action: '+', kind: 'operator', ariaLabel: 'Sumar' },
   { label: '1', action: '1' },
   { label: '2', action: '2' },
   { label: '3', action: '3' },
-  { label: '+', action: '+', kind: 'operator', ariaLabel: 'Sumar' },
+  { label: '=', action: 'equals', kind: 'equals', ariaLabel: 'Calcular' },
   { label: '0', action: '0' },
   { label: '.', action: '.', ariaLabel: 'Punto decimal' },
   { label: '', action: 'blank', kind: 'blank' },
-  { label: '=', action: 'equals', kind: 'equals', ariaLabel: 'Calcular' },
+  { label: '', action: 'blank', kind: 'blank' },
 ]
 
 function getDisplayError(message: string) {
@@ -45,6 +49,14 @@ function getDisplayError(message: string) {
 
   if (normalizedMessage.includes('cero')) {
     return 'No se puede dividir entre cero'
+  }
+
+  if (normalizedMessage.includes('raiz') || normalizedMessage.includes('raíz')) {
+    return 'Raíz inválida'
+  }
+
+  if (normalizedMessage.includes('finito')) {
+    return 'Resultado no válido'
   }
 
   if (normalizedMessage.includes('operacion') || normalizedMessage.includes('operación')) {
@@ -192,6 +204,10 @@ export function App() {
         '*': '×',
         '/': '÷',
         '-': '−',
+        '^': '^',
+        '%': '%',
+        r: '√',
+        R: '√',
         Enter: 'equals',
         Backspace: 'delete',
         Escape: 'clear',

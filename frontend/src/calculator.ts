@@ -1,4 +1,4 @@
-export const operators = ['+', '−', '×', '÷']
+export const operators = ['+', '−', '×', '÷', '^', '%']
 export const MAX_EXPRESSION_LENGTH = 48
 
 export type AppendInputState = {
@@ -8,7 +8,7 @@ export type AppendInputState = {
 }
 
 export function normalizeExpression(expression: string) {
-  return expression.replace(/×/g, '*').replace(/÷/g, '/').replace(/−/g, '-')
+  return expression.replace(/×/g, '*').replace(/÷/g, '/').replace(/−/g, '-').replace(/√/g, 'sqrt')
 }
 
 export function formatCalculatorNumber(value: number) {
@@ -61,6 +61,10 @@ export function appendInput(expression: string, result: number | null, value: st
   const hasResult = result !== null
 
   if (/^\d$/.test(value)) {
+    if (lastCharacter(expression) === ')') {
+      return { error: '', expression, result: null }
+    }
+
     const baseExpression = hasResult || expression === '0' ? '' : expression
     return completeAppend(baseExpression, value)
   }
@@ -71,6 +75,10 @@ export function appendInput(expression: string, result: number | null, value: st
     }
 
     return appendDecimal(expression)
+  }
+
+  if (value === '√') {
+    return appendSquareRoot(expression, result)
   }
 
   if (isOperator(value)) {
@@ -101,8 +109,34 @@ function appendDecimal(expression: string): AppendInputState {
   }
 
   const lastInput = lastCharacter(expression)
+  if (lastInput === ')') {
+    return { error: '', expression, result: null }
+  }
+
   const decimalValue = expression === '' || isOperator(lastInput) ? '0.' : '.'
   return completeAppend(expression, decimalValue)
+}
+
+function appendSquareRoot(expression: string, result: number | null): AppendInputState {
+  if (result !== null) {
+    return completeAppend('', `√(${formatCalculatorNumber(result)})`)
+  }
+
+  const match = expression.match(/(^|[+−×÷^%])(−?\d+(?:\.\d+)?)$/)
+  if (!match || match[2].endsWith('.')) {
+    return {
+      error: 'Ingresa un número válido',
+      expression,
+      result: null,
+    }
+  }
+
+  const start = match.index ?? 0
+  const prefix = match[1]
+  const operand = match[2]
+  const beforeOperand = expression.slice(0, start)
+
+  return completeAppend(`${beforeOperand}${prefix}`, `√(${operand})`)
 }
 
 function completeAppend(current: string, nextValue: string): AppendInputState {
@@ -129,15 +163,15 @@ function isMinusOperator(value: string) {
 
 function canAppendNegativeSign(expression: string) {
   const lastInput = lastCharacter(expression)
-  return expression === '' || lastInput === '×' || lastInput === '÷'
+  return expression === '' || lastInput === '×' || lastInput === '÷' || lastInput === '^' || lastInput === '%'
 }
 
 function removePendingOperators(expression: string) {
-  return expression.replace(/[+−×÷]+−?$/, '')
+  return expression.replace(/[+−×÷^%]+−?$/, '')
 }
 
 function canAppendDecimal(expression: string) {
-  const parts = expression.split(/[+−×÷]/)
+  const parts = expression.split(/[+−×÷^%]/)
   const currentNumber = parts[parts.length - 1] ?? ''
   return !currentNumber.includes('.')
 }

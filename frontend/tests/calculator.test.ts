@@ -9,7 +9,7 @@ import {
 
 describe('calculator state helpers', () => {
   it('normalizes visual operators for the API contract', () => {
-    expect(normalizeExpression('8÷−2+3×4')).toBe('8/-2+3*4')
+    expect(normalizeExpression('8÷−2+3×4^2%10+√(81)')).toBe('8/-2+3*4^2%10+sqrt(81)')
   })
 
   it('starts decimal operands with a visible leading zero', () => {
@@ -24,11 +24,14 @@ describe('calculator state helpers', () => {
   it('replaces stacked pending operators with the latest operator', () => {
     expect(appendInput('8+', null, '×').expression).toBe('8×')
     expect(appendInput('8+×', null, '÷').expression).toBe('8÷')
+    expect(appendInput('8+^', null, '%').expression).toBe('8%')
   })
 
-  it('allows negative operands after multiplication and division', () => {
+  it('allows negative operands after multiplication, division, power and percentage', () => {
     expect(appendInput('8÷', null, '−').expression).toBe('8÷−')
     expect(appendInput('8×', null, '−').expression).toBe('8×−')
+    expect(appendInput('8^', null, '−').expression).toBe('8^−')
+    expect(appendInput('8%', null, '−').expression).toBe('8%−')
   })
 
   it('continues from a previous result when an operator is entered', () => {
@@ -50,5 +53,21 @@ describe('calculator state helpers', () => {
 
   it('formats scientific notation as parser-compatible decimal text', () => {
     expect(formatCalculatorNumber(9.9999999999998e27)).toBe('9999999999999800000000000000')
+  })
+
+  it('wraps the current operand with square root', () => {
+    expect(appendInput('9', null, '√').expression).toBe('√(9)')
+    expect(appendInput('2+9', null, '√').expression).toBe('2+√(9)')
+    expect(appendInput('−9', null, '√').expression).toBe('√(−9)')
+  })
+
+  it('continues from a previous result when square root is entered', () => {
+    expect(appendInput('5+4', 9, '√').expression).toBe('√(9)')
+  })
+
+  it('rejects square root without a complete operand', () => {
+    expect(appendInput('', null, '√').error).toBe('Ingresa un número válido')
+    expect(appendInput('2+', null, '√').error).toBe('Ingresa un número válido')
+    expect(appendInput('2.', null, '√').error).toBe('Ingresa un número válido')
   })
 })

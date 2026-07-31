@@ -57,3 +57,31 @@ func TestCalculateIgnoresSpaces(t *testing.T) {
 		t.Fatalf("expected 2, got %v", result)
 	}
 }
+
+func TestCalculateAdvancedOperations(t *testing.T) {
+	tests := []struct {
+		name       string
+		expression string
+		expected   float64
+	}{
+		{name: "power", expression: "2^3", expected: 8},
+		{name: "negative exponent", expression: "2^-2", expected: 0.25},
+		{name: "square root", expression: "sqrt(81)", expected: 9},
+		{name: "percentage", expression: "200%10", expected: 20},
+		{name: "advanced operations left to right", expression: "2+3^2", expected: 25},
+		{name: "square root as operand", expression: "sqrt(81)+1", expected: 10},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			result, err := calculation.Calculate(test.expression)
+			if err != nil {
+				t.Fatalf("expected no error, got %v", err)
+			}
+
+			if result != test.expected {
+				t.Fatalf("expected %v, got %v", test.expected, result)
+			}
+		})
+	}
+}

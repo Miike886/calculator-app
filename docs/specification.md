@@ -4,7 +4,7 @@
 
 Definir una calculadora full-stack en modalidad monorepo, con frontend en React + TypeScript y backend en Go, comunicados mediante REST API.
 
-La primera version debe comportarse visualmente como una calculadora real y permitir operaciones aritmeticas simples: suma, resta, multiplicacion y division. El alcance de esta fase es definir especificaciones y criterios de aceptacion, sin implementar codigo.
+La version actual debe comportarse visualmente como una calculadora real y permitir operaciones aritmeticas simples y avanzadas dentro del alcance definido: suma, resta, multiplicacion, division, potencia, raiz cuadrada y porcentaje.
 
 ## Requisitos funcionales obligatorios
 
@@ -15,6 +15,9 @@ La primera version debe comportarse visualmente como una calculadora real y perm
   - resta
   - multiplicacion
   - division
+  - potencia
+  - raiz cuadrada
+  - porcentaje
 - La UI debe incluir un boton `DEL` para eliminar el ultimo caracter ingresado.
 - La UI debe incluir un boton `C` para limpiar completamente la operacion actual.
 - La UI debe incluir un boton `=` para ejecutar el calculo.
@@ -68,20 +71,23 @@ Estas capacidades no pertenecen a la primera version, pero deben quedar contempl
 | Resta | `-` | `-` | 2 o mas | Resta los operandos de izquierda a derecha. |
 | Multiplicacion | `x` | `*` | 2 o mas | Retorna el producto de los operandos. |
 | Division | `/` | `/` | 2 o mas | Divide los operandos de izquierda a derecha. |
+| Potencia | `^` | `^` | 2 | Eleva base a exponente. |
+| Raiz cuadrada | `√` | `sqrt(value)` | 1 | Retorna la raiz cuadrada de un valor no negativo. |
+| Porcentaje | `%` | `%` | 2 | Calcula `value * rate / 100`. |
 
 ## Operaciones opcionales futuras
 
-| Operacion | Simbolo sugerido | Operandos esperados | Notas |
-| --- | --- | --- | --- |
-| Potencia | `^` | 2 | Eleva base a exponente. |
-| Raiz cuadrada | `sqrt` o `√` | 1 | No aceptar operandos negativos si se limita a reales. |
-| Porcentaje | `%` | 1 o 2, por definir | Requiere definicion precisa antes de implementar. |
+- Operaciones cientificas adicionales fuera de potencia, raiz cuadrada y porcentaje.
+- Precedencia matematica entre operadores distintos.
 
 ## Comportamiento de operaciones
 
 - Las operaciones binarias deben evaluarse en orden de captura, de izquierda a derecha.
 - No se debe aplicar precedencia matematica entre operadores distintos en esta version.
 - La division entre cero debe rechazarse con error estructurado.
+- La potencia debe rechazar operandos invalidos y resultados no finitos.
+- La raiz cuadrada debe operar sobre un solo valor y rechazar numeros negativos.
+- El porcentaje debe usar dos operandos y calcular `value * rate / 100`.
 - Los numeros decimales deben permitirse si se define soporte de punto decimal en la UI. Para la primera version, se recomienda contemplarlo en la validacion aunque el teclado visual inicial pueda priorizar enteros.
 - Los numeros negativos deben aceptarse como operandos cuando el signo `-` aparece al inicio de la expresion o despues de un operador.
 - Los espacios en la expresion deben ser ignorados por el backend.
@@ -97,6 +103,9 @@ Estas capacidades no pertenecen a la primera version, pero deben quedar contempl
 - La expresion puede comenzar con `-` cuando representa un numero negativo.
 - No deben permitirse dos operadores binarios consecutivos, salvo el signo `-` usado como parte de un numero negativo.
 - Division entre cero debe retornar error.
+- Raiz cuadrada de numeros negativos debe retornar error.
+- Operaciones unarias o binarias sin los operandos requeridos deben retornar error.
+- Resultados no finitos deben retornar error.
 - El backend debe rechazar operaciones no soportadas en la version actual.
 - El backend debe devolver `400 Bad Request` para entradas invalidas.
 
@@ -117,6 +126,11 @@ Estas capacidades no pertenecen a la primera version, pero deben quedar contempl
 - Numeros grandes.
 - Resultados decimales: `10/4`.
 - Multiples operaciones en una expresion: `2+3*4`, evaluada como `(2+3)*4`.
+- Potencia: `2^3`.
+- Raiz cuadrada: `sqrt(81)`.
+- Porcentaje: `200%10`, equivalente a `200 * 10 / 100`.
+- Raiz cuadrada negativa: `sqrt(-9)`.
+- Resultado no finito: potencia con valores fuera de rango.
 - Uso repetido de `DEL` hasta dejar la expresion vacia.
 - Uso de `C` despues de un calculo exitoso.
 - Presionar `=` con una expresion incompleta.
@@ -133,6 +147,8 @@ Estas capacidades no pertenecen a la primera version, pero deben quedar contempl
 | Expresion incompleta | 400 | `INCOMPLETE_EXPRESSION` | La expresion esta incompleta. |
 | Operacion no soportada | 400 | `UNSUPPORTED_OPERATION` | La operacion no esta soportada en esta version. |
 | Division entre cero | 400 | `DIVISION_BY_ZERO` | No se puede dividir entre cero. |
+| Raiz cuadrada negativa | 400 | `NEGATIVE_SQUARE_ROOT` | No se puede calcular la raiz cuadrada de un numero negativo. |
+| Resultado no finito | 400 | `NON_FINITE_RESULT` | El resultado no es finito. |
 | Error inesperado | 500 | `INTERNAL_ERROR` | Ocurrio un error inesperado. |
 
 ## Contrato del endpoint de calculo
@@ -174,7 +190,7 @@ Codigo HTTP: `200 OK`
 }
 ```
 
-### Operaciones soportadas en primera version
+### Operaciones soportadas en la version actual
 
 | Operacion | Simbolo | Operandos esperados |
 | --- | --- | --- |
@@ -182,6 +198,9 @@ Codigo HTTP: `200 OK`
 | Resta | `-` | 2 o mas |
 | Multiplicacion | `*` | 2 o mas |
 | Division | `/` | 2 o mas |
+| Potencia | `^` | 2 |
+| Raiz cuadrada | `sqrt(value)` | 1 |
+| Porcentaje | `%` | 2 |
 
 ### Ejemplos de uso
 
@@ -241,8 +260,10 @@ Response:
 - El frontend llama a `POST /api/v1/calculations` para calcular.
 - `GET /health` retorna estado saludable del backend.
 - El backend calcula correctamente suma, resta, multiplicacion y division.
+- El backend calcula correctamente potencia, raiz cuadrada y porcentaje.
 - El backend calcula expresiones con dos o mas operandos de izquierda a derecha, sin precedencia entre operadores distintos.
 - El backend rechaza division entre cero.
+- El backend rechaza raiz cuadrada de numeros negativos y resultados no finitos.
 - El backend retorna errores estructurados.
 - Existen pruebas unitarias para logica critica de frontend y backend.
 - Existen pruebas e2e para flujos principales de calculadora.
@@ -255,7 +276,8 @@ Response:
 - Autenticacion y autorizacion.
 - Gestion de usuarios.
 - Microservicios adicionales.
-- Operaciones cientificas fuera de las indicadas como futuras.
+- Operaciones cientificas fuera de potencia, raiz cuadrada y porcentaje.
+- Precedencia matematica entre operadores distintos.
 - Internacionalizacion.
 - Temas visuales avanzados.
 - Modo offline.

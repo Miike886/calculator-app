@@ -14,6 +14,9 @@ Definir la experiencia visual e interactiva de una calculadora web que se compor
   - resta `-`
   - multiplicacion `x`
   - division `/`
+  - potencia `^`
+  - raiz cuadrada `√`
+  - porcentaje `%`
 - Boton `DEL`.
 - Boton `C`.
 - Boton `=`.
@@ -22,9 +25,6 @@ Definir la experiencia visual e interactiva de una calculadora web que se compor
 
 ## Alcance opcional futuro
 
-- Boton de potencia.
-- Boton de raiz cuadrada.
-- Boton de porcentaje.
 - Soporte visual para operaciones cientificas adicionales.
 
 ## Layout propuesto
@@ -38,7 +38,8 @@ Estructura visual sugerida:
 | expresion actual      |
 | resultado             |
 +-----------------------+
-| C   DEL   /   x       |
+| C   DEL   √   /       |
+| ^    %        x       |
 | 7    8    9   -       |
 | 4    5    6   +       |
 | 1    2    3   =       |
@@ -86,6 +87,9 @@ El punto decimal `.` queda como recomendacion si se decide soportar decimales de
 | `-` | Agrega operador de resta si la expresion lo permite. |
 | `x` | Agrega operador de multiplicacion; se normaliza como `*` al enviar al backend. |
 | `/` | Agrega operador de division si la expresion lo permite. |
+| `^` | Agrega operador de potencia si la expresion lo permite. |
+| `%` | Agrega operador de porcentaje binario si la expresion lo permite. |
+| `√` | Envuelve el operando actual o el resultado previo como raiz cuadrada. |
 | `DEL` | Elimina el ultimo caracter de la expresion. |
 | `C` | Limpia expresion, resultado y error. |
 | `=` | Ejecuta el calculo llamando al backend. |
@@ -99,6 +103,9 @@ El punto decimal `.` queda como recomendacion si se decide soportar decimales de
 | `-` | Agrega resta. |
 | `*` | Agrega multiplicacion. |
 | `/` | Agrega division. |
+| `^` | Agrega potencia. |
+| `%` | Agrega porcentaje. |
+| `r` o `R` | Aplica raiz cuadrada al operando actual. |
 | `Enter` | Ejecuta el calculo. |
 | `Backspace` | Elimina el ultimo caracter. |
 | `Escape` | Limpia expresion, resultado y error. |
@@ -119,6 +126,10 @@ El punto decimal `.` queda como recomendacion si se decide soportar decimales de
 - Permitir reemplazar el operador pendiente si aun no se ingreso el siguiente operando.
 - Al reemplazar un operador pendiente, no debe conservarse una secuencia previa de operadores.
 - Permitir `-` como signo negativo al inicio de la expresion o despues de multiplicacion/division.
+- Permitir `-` como signo negativo despues de potencia o porcentaje cuando se capture un operando negativo.
+- La raiz cuadrada requiere un operando completo; no debe aplicarse sobre expresion vacia, operador pendiente o numero terminado en punto.
+- La raiz cuadrada de un numero negativo debe mostrarse como error.
+- Potencia y porcentaje requieren operandos a ambos lados.
 - Al ingresar `.` al inicio de un operando, mostrar `0.` para que el punto sea visible y el numero siga siendo valido.
 - Mostrar feedback visual cuando una tecla o boton no sea aplicable.
 - Mantener botones con tamano estable para evitar saltos de layout.
@@ -168,6 +179,10 @@ Cada boton debe contemplar:
 - `C` limpia pantalla.
 - `Escape` limpia pantalla.
 - Division entre cero muestra error.
+- Potencia calcula `2^3 = 8`.
+- Raiz cuadrada calcula `√(81) = 9`.
+- Porcentaje calcula `200%10 = 20`.
+- Raiz cuadrada de numero negativo muestra error.
 - Una expresion incompleta no dispara un calculo exitoso.
 
 ## Fuera de alcance UI

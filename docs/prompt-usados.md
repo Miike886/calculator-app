@@ -525,3 +525,44 @@ aún así dentro del back siento que están un poco desacoplados los test. En tr
 
 Alinea todos los skills y la nueva documentación con estos nuevos cambios
 ```
+
+## Prompt 15
+
+```text
+Usa la Skill `feature-implementer` para agregar operaciones avanzadas a la calculadora existente.
+
+Implementa:
+
+- potencia;
+- raíz cuadrada;
+- porcentaje.
+
+Comportamiento esperado:
+
+- Potencia debe recibir base y exponente.
+- Raíz cuadrada debe operar sobre un solo valor.
+- Porcentaje debe calcular:
+  percentage(value, rate) = value * rate / 100
+- El resultado de cualquiera de estas operaciones debe poder reutilizarse para continuar calculando.
+- Debe funcionar mediante clic y teclado cuando exista una tecla o combinación apropiada.
+- Mantén los errores integrados en el display.
+
+Agrega botones para las nuevas operaciones sin romper la distribución visual actual. Ajusta la cuadrícula de forma coherente y responsive.
+
+Incluye validaciones para:
+
+- raíz cuadrada de números negativos;
+- operandos faltantes;
+- valores no numéricos;
+- resultados no finitos;
+- base o exponente inválidos;
+- uso incorrecto de operaciones unarias y binarias.
+
+Actualiza frontend, backend y contrato API. Agrega pruebas backend y frontend para casos exitosos, inválidos, límites y continuidad desde resultados previos.
+
+No agregues historial, persistencia ni parsing de expresiones con precedencia matemática.
+
+Agrega este prompt a `docs/prompts-usados.md`.
+
+No hagas commits ni modifiques ramas.
+```
