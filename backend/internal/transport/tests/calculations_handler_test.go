@@ -34,10 +34,14 @@ func TestCalculationsHandlerCalculatesBasicOperations(t *testing.T) {
 		{name: "multiplication", expression: "2*3*4", expected: 24},
 		{name: "division", expression: "100/2/5", expected: 10},
 		{name: "division with negative divisor", expression: "100/-2/5", expected: -10},
-		{name: "left to right", expression: "2+3*4", expected: 20},
+		{name: "mixed precedence", expression: "2+3*4", expected: 14},
 		{name: "power", expression: "2^3", expected: 8},
+		{name: "power precedence", expression: "2+3^2", expected: 11},
+		{name: "same precedence left to right", expression: "20/5*2", expected: 8},
 		{name: "square root", expression: "sqrt(81)", expected: 9},
+		{name: "square root with mixed precedence", expression: "sqrt(16)+2*3", expected: 10},
 		{name: "percentage", expression: "200%10", expected: 20},
+		{name: "percentage precedence", expression: "100+200%10", expected: 120},
 	}
 
 	for _, test := range tests {

@@ -24,7 +24,7 @@ go test ./...
 
 Cubre:
 
-- parser y calculo lineal de suma, resta, multiplicacion y division;
+- parser y calculo con precedencia de suma, resta, multiplicacion y division;
 - potencia, raiz cuadrada y porcentaje;
 - multiples operandos;
 - numeros decimales y negativos;
@@ -34,7 +34,7 @@ Cubre:
 
 Estructura actual:
 
-- `backend/internal/calculation/tests/calculation_success_test.go`: operaciones exitosas basicas y avanzadas, decimales, negativos y evaluacion izquierda a derecha.
+- `backend/internal/calculation/tests/calculation_success_test.go`: operaciones exitosas basicas y avanzadas, decimales, negativos, precedencia y evaluacion izquierda a derecha por prioridad.
 - `backend/internal/calculation/tests/calculation_errors_test.go`: errores de validacion, operaciones incompletas, division entre cero, raiz cuadrada negativa y resultados no finitos.
 
 ## Backend handlers / contrato HTTP
@@ -106,7 +106,7 @@ Los puertos pueden cambiarse con `E2E_BACKEND_PORT` y `E2E_FRONTEND_PORT`. Playw
 Cubre flujos reales:
 
 - suma por clicks;
-- operacion mixta evaluada de izquierda a derecha;
+- operacion mixta evaluada con precedencia;
 - multiples operandos;
 - operacion encadenada desde un resultado previo;
 - calculo por teclado con `Enter`;

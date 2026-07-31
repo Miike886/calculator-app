@@ -577,22 +577,89 @@ Agrega este prompt a `docs/prompts-usados.md`.
 
 No hagas commits ni modifiques ramas.
 El borde derecho del delete y del "=" no está alineado con los demás
-```
 
 ## Prompt 14
 
 ```text
-El límite de 48 caracteres es bastante, hay que reducirlo a algo realista y razonable
+Usa la Skill `feature-implementer` para preparar el proyecto para su entrega final, respetando la documentación y configuración existentes.
+
+Completa y revisa:
+
+- `README.md` con descripción del proyecto, stack, arquitectura y estructura del repositorio setup instructions, API examples, and design decisions; 
+- requisitos previos e instrucciones para ejecutar frontend y backend localmente;
+- instrucciones para levantar toda la aplicación con Docker Compose;
+- variables de entorno necesarias;
+- ejemplos de uso del API con `curl`;
+- operaciones soportadas y formato de errores;
+- comandos para ejecutar pruebas unitarias, integración, E2E y cobertura;
+- decisiones técnicas y supuestos relevantes;
+- limitaciones conocidas;
+- sección sobre uso de IA y referencia a `docs/prompts-usados.md`.
+
+Verifica también que:
+
+- `docker compose up --build` levante frontend y backend correctamente;
+- el frontend consuma la URL configurada del backend;
+- el backend exponga `GET /health`;
+- no existan instrucciones obsoletas o contradictorias;
+- no haya secretos, archivos temporales ni contenido de depuración;
+- la documentación permita que otra persona clone y ejecute el proyecto sin contexto adicional.
+
+No agregues nuevas funcionalidades salvo que sea necesario corregir un problema que impida ejecutar, probar o evaluar la aplicación.
+
+Agrega este prompt a `docs/prompts-usados.md`.
+
+No hagas commits ni modifiques ramas.
 ```
 
 ## Prompt 15
 
 ```text
-la ui no tiene un controlador directo para navegar horizontalmente en el resultado, tenemos que ajustar eso ya sea restringiendo la cantidad de caracteres, o agregando navegación explícita de forma natural
+Usa la Skill `feature-implementer` para agregar jerarquía de operaciones a la calculadora existente.
+
+La calculadora debe evaluar expresiones mixtas respetando esta precedencia:
+
+1. raíz cuadrada;
+2. potencia;
+3. multiplicación y división;
+4. suma y resta.
+
+Las operaciones con la misma prioridad deben evaluarse de izquierda a derecha, excepto potencia si la implementación actual define asociatividad distinta; en ese caso, documenta y prueba la decisión.
+
+Ejemplos esperados:
+
+- `2 + 3 × 4 = 14`
+- `20 ÷ 5 × 2 = 8`
+- `2 + 3² = 11`
+- `√16 + 2 × 3 = 10`
+
+Actualiza la lógica necesaria para que frontend y backend utilicen una representación consistente de la expresión. No evalúes expresiones con `eval` ni mediante ejecución dinámica de código.
+
+Mantén:
+
+- entrada por clic y teclado;
+- cálculo con múltiples operandos;
+- continuidad usando el resultado anterior;
+- errores integrados en el display;
+- validación de expresiones incompletas;
+- división entre cero;
+- resultados no finitos.
+
+Agrega o actualiza pruebas unitarias, de integración, frontend y E2E para:
+
+- precedencia entre operaciones distintas;
+- operaciones con la misma prioridad;
+- expresiones largas;
+- operaciones avanzadas combinadas;
+- expresiones inválidas;
+- regresión de los flujos existentes.
+
+Actualiza el contrato API y la documentación si cambia la estructura del request.
+
+No agregues todavía paréntesis, variables, funciones adicionales ni un lenguaje matemático completo.
+
+Agrega este prompt a `docs/prompts-usados.md`.
+
+No hagas commits ni modifiques ramas.
 ```
 
-## Prompt 16
-
-```text
-Asegúrate de manejar todas las excepciones, por ejemplo si un resultado sobrepasa el límite del tipo de dato
-```

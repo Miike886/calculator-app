@@ -4,6 +4,7 @@ const backendPort = process.env.E2E_BACKEND_PORT ?? '18080'
 const frontendPort = process.env.E2E_FRONTEND_PORT ?? '5173'
 const backendURL = `http://127.0.0.1:${backendPort}`
 const frontendURL = `http://127.0.0.1:${frontendPort}`
+const goBinary = process.env.GO_BINARY ?? 'go'
 const reuseServers = process.env.PW_REUSE_SERVERS === 'true'
 
 export default defineConfig({
@@ -18,7 +19,7 @@ export default defineConfig({
   },
   webServer: [
     {
-      command: '"C:\\Program Files\\Go\\bin\\go.exe" run ./cmd/api',
+      command: `"${goBinary}" run ./cmd/api`,
       cwd: '../backend',
       env: {
         PORT: backendPort,

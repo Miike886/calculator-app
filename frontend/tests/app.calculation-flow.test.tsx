@@ -88,6 +88,34 @@ describe('App calculation flow', () => {
     )
   })
 
+  it('submits mixed expressions and displays precedence results from the API', async () => {
+    vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ expression: '2+3*4', result: 14 }),
+    } as Response)
+
+    render(<App />)
+
+    fireEvent.click(screen.getByRole('button', { name: '2' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Sumar' }))
+    fireEvent.click(screen.getByRole('button', { name: '3' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Multiplicar' }))
+    fireEvent.click(screen.getByRole('button', { name: '4' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Calcular' }))
+
+    await waitFor(() => {
+      expect(screen.getByTestId('expression-display')).toHaveTextContent('2+3×4')
+      expect(screen.getByTestId('result-display')).toHaveTextContent('14')
+    })
+
+    expect(globalThis.fetch).toHaveBeenCalledWith(
+      expect.stringContaining('/api/v1/calculations'),
+      expect.objectContaining({
+        body: JSON.stringify({ expression: '2+3*4' }),
+      }),
+    )
+  })
+
   it('continues calculating from the previous result when an operator is selected', async () => {
     vi.spyOn(globalThis, 'fetch')
       .mockResolvedValueOnce({

@@ -5,15 +5,15 @@ services:
     environment:
       PORT: "8080"
     ports:
-      - "8080:8080"
+      - "18080:8080"
 
   frontend:
     build:
       context: ./frontend
       args:
-        VITE_API_BASE_URL: "http://localhost:8080"
+        VITE_API_BASE_URL: "http://localhost:18080"
     environment:
-      VITE_API_BASE_URL: "http://localhost:8080"
+      VITE_API_BASE_URL: "http://localhost:18080"
     ports:
       - "5173:80"
     depends_on:

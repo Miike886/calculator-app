@@ -143,7 +143,7 @@ Response exitosa:
 ```json
 {
   "expression": "2+3*4",
-  "result": 20
+  "result": 14
 }
 ```
 
@@ -202,7 +202,7 @@ Logica de dominio.
 Responsabilidades:
 
 - parsear expresiones validas
-- evaluar expresiones lineales de izquierda a derecha
+- evaluar expresiones respetando precedencia de operaciones
 - calcular resultados
 - detectar division entre cero
 - detectar raiz cuadrada negativa y resultados no finitos
@@ -275,7 +275,8 @@ Obligatorias:
 - Calculo de potencia.
 - Calculo de raiz cuadrada.
 - Calculo de porcentaje.
-- Evaluacion de izquierda a derecha sin precedencia entre operadores distintos.
+- Evaluacion con precedencia entre operadores distintos.
+- Evaluacion de izquierda a derecha entre operadores con la misma prioridad.
 - Division entre cero.
 - Raiz cuadrada negativa y resultados no finitos.
 - Serializacion de responses exitosas y errores.
@@ -330,6 +331,7 @@ No se requieren variables para persistencia, autenticacion ni credenciales en es
 | Pruebas desde el inicio | Reduce riesgo de regresiones en interacciones y reglas de calculo. |
 | Tests separados por capa y comportamiento | Mantiene legibilidad, evita suites monoliticas y facilita detectar brechas reales de cobertura. |
 | Operaciones avanzadas en el mismo endpoint | Mantiene un contrato simple y evita crear endpoints por operacion sin necesidad. |
+| Precedencia en backend | Mantiene una unica fuente autoritativa de calculo y evita duplicar reglas en frontend. |
 
 ## Riesgos de sobreingenieria a evitar
 

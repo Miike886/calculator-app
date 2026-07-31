@@ -47,44 +47,100 @@ func Calculate(expression string) (float64, error) {
 		return 0, ErrInvalidExpression
 	}
 
-	result, err := parseOperand(tokens[0])
+	values := make([]float64, 0, (len(tokens)+1)/2)
+	operators := make([]string, 0, (len(tokens)-1)/2)
+
+	for index, token := range tokens {
+		if index%2 == 0 {
+			value, err := parseOperand(token)
+			if err != nil {
+				return 0, err
+			}
+			values = append(values, value)
+			continue
+		}
+
+		operators = append(operators, token)
+	}
+
+	result, err := evaluateWithPrecedence(values, operators)
 	if err != nil {
 		return 0, err
 	}
 
-	for index := 1; index < len(tokens); index += 2 {
-		operator := tokens[index]
-		next, err := parseOperand(tokens[index+1])
-		if err != nil {
-			return 0, err
-		}
+	return result, nil
+}
 
-		switch operator {
-		case "+":
-			result += next
-		case "-":
-			result -= next
-		case "*":
-			result *= next
-		case "/":
-			if next == 0 {
-				return 0, ErrDivisionByZero
+func evaluateWithPrecedence(values []float64, operators []string) (float64, error) {
+	precedenceGroups := [][]string{
+		{"^"},
+		{"*", "/", "%"},
+		{"+", "-"},
+	}
+
+	for _, group := range precedenceGroups {
+		for index := 0; index < len(operators); {
+			if !containsOperator(group, operators[index]) {
+				index++
+				continue
 			}
-			result /= next
-		case "^":
-			result = math.Pow(result, next)
-		case "%":
-			result = result * next / 100
-		default:
-			return 0, ErrUnsupportedOperation
-		}
 
-		if !isFinite(result) {
-			return 0, ErrNonFiniteResult
+			result, err := applyOperator(values[index], values[index+1], operators[index])
+			if err != nil {
+				return 0, err
+			}
+
+			values[index] = result
+			values = append(values[:index+1], values[index+2:]...)
+			operators = append(operators[:index], operators[index+1:]...)
 		}
 	}
 
+	if len(values) != 1 || len(operators) != 0 {
+		return 0, ErrInvalidExpression
+	}
+
+	return values[0], nil
+}
+
+func applyOperator(left float64, right float64, operator string) (float64, error) {
+	var result float64
+
+	switch operator {
+	case "+":
+		result = left + right
+	case "-":
+		result = left - right
+	case "*":
+		result = left * right
+	case "/":
+		if right == 0 {
+			return 0, ErrDivisionByZero
+		}
+		result = left / right
+	case "^":
+		result = math.Pow(left, right)
+	case "%":
+		result = left * right / 100
+	default:
+		return 0, ErrUnsupportedOperation
+	}
+
+	if !isFinite(result) {
+		return 0, ErrNonFiniteResult
+	}
+
 	return result, nil
+}
+
+func containsOperator(operators []string, value string) bool {
+	for _, operator := range operators {
+		if operator == value {
+			return true
+		}
+	}
+
+	return false
 }
 
 func tokenize(expression string) ([]string, error) {

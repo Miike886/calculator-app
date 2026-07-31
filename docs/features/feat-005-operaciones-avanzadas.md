@@ -14,7 +14,8 @@ Implementada y validada.
 - Potencia usa `^` y requiere base y exponente.
 - Raiz cuadrada usa `sqrt(value)` en API y `√(value)` en UI; requiere un solo valor.
 - Porcentaje usa `%` como operacion binaria y calcula `value * rate / 100`.
-- Las operaciones binarias siguen evaluandose de izquierda a derecha, sin precedencia matematica.
+- Las expresiones mixtas respetan precedencia: raiz cuadrada, potencia, multiplicacion/division/porcentaje, suma/resta.
+- Las operaciones con la misma prioridad se evaluan de izquierda a derecha, incluida potencia.
 - El resultado de una operacion avanzada puede reutilizarse para continuar calculando.
 - La UI agrega botones `^`, `√` y `%` sin cambiar el endpoint ni agregar persistencia.
 - El teclado soporta `^`, `%` y `r`/`R` para aplicar raiz cuadrada al operando actual.
@@ -25,17 +26,18 @@ Implementada y validada.
 - `2^3` retorna `8`.
 - `sqrt(81)` retorna `9`.
 - `200%10` retorna `20`.
-- `2+3^2` retorna `25` por evaluacion izquierda a derecha.
+- `2+3^2` retorna `11` por precedencia de potencia.
+- `sqrt(16)+2*3` retorna `10` por precedencia de raiz cuadrada y multiplicacion.
 - `sqrt(-9)` retorna `NEGATIVE_SQUARE_ROOT`.
 - Una potencia o porcentaje sin operandos retorna error estructurado.
 - Un resultado no finito retorna `NON_FINITE_RESULT`.
 - Clicks y teclado usan la misma logica de estado.
-- No se agrega historial, persistencia ni precedencia matematica.
+- No se agrega historial, persistencia, parentesis ni funciones adicionales.
 
 ## Impacto
 
 - Frontend: agrega botones avanzados, normalizacion `√` -> `sqrt`, shortcuts de teclado y pruebas de continuidad.
-- Backend: amplia parser y evaluador lineal para `^`, `%` y `sqrt(value)`.
+- Backend: amplia parser y evaluador con precedencia para `^`, `%` y `sqrt(value)`.
 - API: mantiene endpoint y formato JSON; amplia operaciones soportadas y codigos de error.
 - Datos: sin impacto, no hay persistencia.
 - Seguridad: sin nuevos datos sensibles ni autenticacion.
@@ -66,6 +68,6 @@ Implementada y validada.
 
 ## Limitaciones
 
-- No hay precedencia matematica entre operadores distintos.
 - `sqrt(value)` acepta un valor numerico, no una subexpresion anidada.
+- No hay parentesis para agrupar subexpresiones.
 - No se agregan operaciones cientificas adicionales.

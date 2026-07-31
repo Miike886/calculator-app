@@ -11,7 +11,8 @@ Implementada y validada.
 ## Comportamiento implementado
 
 - `POST /api/v1/calculations` acepta expresiones con `+`, `-`, `*` y `/`.
-- Las expresiones se evaluan de izquierda a derecha, en orden de captura, sin precedencia matematica entre operadores distintos.
+- Las expresiones mixtas se evaluan con precedencia a partir de la feature de jerarquia de operaciones.
+- Las operaciones con la misma prioridad se evaluan de izquierda a derecha.
 - El backend ignora espacios y retorna JSON exitoso con `expression` y `result`.
 - Division entre cero retorna error estructurado `DIVISION_BY_ZERO`.
 - La division acepta operandos negativos, por ejemplo `100/-2/5`.
@@ -32,23 +33,23 @@ Implementada y validada.
 - `2*3*4` retorna `24`.
 - `100/2/5` retorna `10`.
 - `100/-2/5` retorna `-10`.
-- `2+3*4` retorna `20`.
+- `2+3*4` retorna `14`.
 - Una expresion de mas de 24 caracteres retorna `EXPRESSION_TOO_LONG`.
 - `10/0` retorna `400` con `DIVISION_BY_ZERO`.
 - Clicks y teclado mantienen la misma logica de estado.
-- No se agregan potencia, raiz cuadrada, porcentaje ni precedencia.
+- Potencia, raiz cuadrada, porcentaje y precedencia fueron agregadas en features posteriores.
 
 ## Impacto
 
 - Frontend: actualiza la gestion de expresion y resultado.
-- Backend: amplia parser y calculadora lineal.
+- Backend: amplia parser y calculadora; la precedencia fue agregada posteriormente en el mismo endpoint.
 - API: mantiene el endpoint y formato JSON; amplia operaciones soportadas.
 - Datos: sin impacto, no hay persistencia.
 - Seguridad: sin nuevos datos sensibles ni autenticacion.
 
 ## Pruebas
 
-- Unit tests de backend para operaciones basicas, operandos multiples, evaluacion izquierda-a-derecha, division entre cero y entradas invalidas.
+- Unit tests de backend para operaciones basicas, operandos multiples, precedencia, division entre cero y entradas invalidas.
 - Tests de handler HTTP para respuestas exitosas y errores estructurados.
 - Unit tests frontend para la logica pura de entrada, normalizacion, limite de caracteres, decimales, negativos y resultados grandes.
 - Tests de frontend para normalizacion de simbolos, multiples operandos, continuidad desde resultado, reinicio desde resultado, reemplazo de operador pendiente y errores en display.
@@ -64,6 +65,6 @@ Implementada y validada.
 
 ## Limitaciones
 
-- No hay precedencia matematica entre operadores distintos.
-- No hay numeros negativos como primer operando.
-- No hay operaciones avanzadas.
+- No hay parentesis para agrupar subexpresiones.
+- `sqrt(value)` acepta un valor numerico, no una subexpresion anidada.
+- No hay variables ni funciones adicionales.
