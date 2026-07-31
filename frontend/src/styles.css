@@ -114,6 +114,39 @@ button {
   white-space: nowrap;
 }
 
+.display-scroll-controls {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  min-height: 26px;
+}
+
+.display-scroll-button {
+  align-items: center;
+  background: rgba(89, 97, 111, 0.12);
+  border: 1px solid rgba(89, 97, 111, 0.28);
+  border-radius: 3px;
+  color: #59616f;
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 20px;
+  font-weight: 700;
+  height: 26px;
+  justify-content: center;
+  line-height: 1;
+  padding: 0;
+  width: 34px;
+}
+
+.display-scroll-button:hover {
+  background: rgba(89, 97, 111, 0.18);
+}
+
+.display-scroll-button:focus-visible {
+  outline: 2px solid #59616f;
+  outline-offset: 2px;
+}
+
 .result-line {
   color: #59616f;
   font-size: clamp(42px, 15vw, 72px);
@@ -153,6 +186,7 @@ button {
   font-size: clamp(30px, 10vw, 52px);
   font-weight: 400;
   justify-content: center;
+  justify-self: stretch;
   line-height: 1;
   min-height: 58px;
   padding: 0;
@@ -160,6 +194,7 @@ button {
     transform 120ms ease,
     box-shadow 120ms ease,
     filter 120ms ease;
+  width: 100%;
 }
 
 .key:hover {
@@ -228,7 +263,7 @@ button {
 
   .calculator-display {
     border-width: 6px;
-    min-height: 92px;
+    min-height: 112px;
     padding: 12px 14px;
   }
 

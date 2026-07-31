@@ -2,6 +2,7 @@ package calculation_test
 
 import (
 	"errors"
+	"strings"
 	"testing"
 
 	"calculator-app/backend/internal/calculation"
@@ -16,7 +17,7 @@ func TestCalculateRejectsEmptyExpression(t *testing.T) {
 }
 
 func TestCalculateRejectsExpressionOverMaxLength(t *testing.T) {
-	_, err := calculation.Calculate("1234567890123456789012345678901234567890123456789+1")
+	_, err := calculation.Calculate(strings.Repeat("1", calculation.MaxExpressionLength+1))
 
 	if !errors.Is(err, calculation.ErrExpressionTooLong) {
 		t.Fatalf("expected ErrExpressionTooLong, got %v", err)

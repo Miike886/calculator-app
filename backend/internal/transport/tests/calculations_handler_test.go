@@ -5,8 +5,10 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
+	"calculator-app/backend/internal/calculation"
 	"calculator-app/backend/internal/transport"
 )
 
@@ -102,7 +104,7 @@ func TestCalculationsHandlerRejectsEmptyExpression(t *testing.T) {
 }
 
 func TestCalculationsHandlerRejectsExpressionOverMaxLength(t *testing.T) {
-	request := httptest.NewRequest(http.MethodPost, "/api/v1/calculations", bytes.NewBufferString(`{"expression":"1234567890123456789012345678901234567890123456789+1"}`))
+	request := httptest.NewRequest(http.MethodPost, "/api/v1/calculations", bytes.NewBufferString(`{"expression":"`+strings.Repeat("1", calculation.MaxExpressionLength+1)+`"}`))
 	response := httptest.NewRecorder()
 
 	transport.CalculationsHandler(response, request)

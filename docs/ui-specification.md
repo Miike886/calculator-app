@@ -72,6 +72,7 @@ El punto decimal `.` queda como recomendacion si se decide soportar decimales de
 - Si el usuario selecciona un operador despues de un resultado, el resultado debe usarse como primer operando.
 - Si el usuario escribe un numero despues de un resultado, debe iniciar una operacion nueva.
 - Si la expresion o el resultado exceden el ancho disponible, el display debe permitir revisar el contenido sin cambiar el tamano de la calculadora.
+- El display debe incluir controles explicitos para desplazarse horizontalmente cuando el contenido sea largo.
 - El display debe mostrar un contador compacto de caracteres de la expresion actual.
 
 ### Error
@@ -119,7 +120,7 @@ El punto decimal `.` queda como recomendacion si se decide soportar decimales de
 - No permitir caracteres no soportados por la primera version.
 - No enviar expresiones vacias al backend.
 - No enviar expresiones que terminen en operador.
-- No permitir que la expresion supere 48 caracteres.
+- No permitir que la expresion supere 24 caracteres.
 - No permitir que `DEL` produzca un estado invalido visualmente; si no quedan caracteres, volver al estado inicial.
 
 ### Recomendadas

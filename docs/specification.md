@@ -111,7 +111,7 @@ Estas capacidades no pertenecen a la primera version, pero deben quedar contempl
 
 ### Recomendadas
 
-- La expresion no debe superar 48 caracteres en la version visual actual.
+- La expresion no debe superar 24 caracteres en la version visual actual.
 - Usar numeros de punto flotante con una politica clara de precision para resultados decimales.
 - Normalizar simbolos visuales antes de enviar al backend, por ejemplo convertir `x` a `*`.
 

@@ -110,6 +110,23 @@ describe('App input handling', () => {
     expect(screen.getByTestId('expression-display')).toHaveTextContent('√(81)')
   })
 
+  it('provides explicit horizontal display navigation controls', () => {
+    const scrollBy = vi.fn()
+
+    Object.defineProperty(HTMLElement.prototype, 'scrollBy', {
+      configurable: true,
+      value: scrollBy,
+    })
+
+    render(<App />)
+
+    fireEvent.click(screen.getByRole('button', { name: 'Desplazar display a la izquierda' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Desplazar display a la derecha' }))
+
+    expect(scrollBy).toHaveBeenCalledWith({ behavior: 'smooth', left: -120 })
+    expect(scrollBy).toHaveBeenCalledWith({ behavior: 'smooth', left: 120 })
+  })
+
   it('keeps long expressions available in the display', () => {
     render(<App />)
 
