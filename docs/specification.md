@@ -78,12 +78,12 @@ Estas capacidades no pertenecen a la primera version, pero deben quedar contempl
 ## Operaciones opcionales futuras
 
 - Operaciones cientificas adicionales fuera de potencia, raiz cuadrada y porcentaje.
-- Precedencia matematica entre operadores distintos.
+- Parentesis para agrupar subexpresiones.
 
 ## Comportamiento de operaciones
 
-- Las operaciones binarias deben evaluarse en orden de captura, de izquierda a derecha.
-- No se debe aplicar precedencia matematica entre operadores distintos en esta version.
+- Las expresiones mixtas deben evaluarse respetando precedencia: raiz cuadrada, potencia, multiplicacion/division/porcentaje, suma/resta.
+- Las operaciones con la misma prioridad deben evaluarse de izquierda a derecha, incluida potencia.
 - La division entre cero debe rechazarse con error estructurado.
 - La potencia debe rechazar operandos invalidos y resultados no finitos.
 - La raiz cuadrada debe operar sobre un solo valor y rechazar numeros negativos.
@@ -125,7 +125,9 @@ Estas capacidades no pertenecen a la primera version, pero deben quedar contempl
 - Division con operandos negativos: `10/-2`, `-10/2`.
 - Numeros grandes.
 - Resultados decimales: `10/4`.
-- Multiples operaciones en una expresion: `2+3*4`, evaluada como `(2+3)*4`.
+- Multiples operaciones en una expresion: `2+3*4`, evaluada como `2+(3*4)`.
+- Potencia antes de suma: `2+3^2`, evaluada como `2+(3^2)`.
+- Raiz cuadrada antes de operaciones binarias: `sqrt(16)+2*3`, evaluada como `sqrt(16)+(2*3)`.
 - Potencia: `2^3`.
 - Raiz cuadrada: `sqrt(81)`.
 - Porcentaje: `200%10`, equivalente a `200 * 10 / 100`.
@@ -172,7 +174,7 @@ Codigo HTTP: `200 OK`
 ```json
 {
   "expression": "12+7*2",
-  "result": 38
+  "result": 26
 }
 ```
 
@@ -261,7 +263,7 @@ Response:
 - `GET /health` retorna estado saludable del backend.
 - El backend calcula correctamente suma, resta, multiplicacion y division.
 - El backend calcula correctamente potencia, raiz cuadrada y porcentaje.
-- El backend calcula expresiones con dos o mas operandos de izquierda a derecha, sin precedencia entre operadores distintos.
+- El backend calcula expresiones mixtas respetando precedencia de operaciones.
 - El backend rechaza division entre cero.
 - El backend rechaza raiz cuadrada de numeros negativos y resultados no finitos.
 - El backend retorna errores estructurados.
@@ -277,7 +279,7 @@ Response:
 - Gestion de usuarios.
 - Microservicios adicionales.
 - Operaciones cientificas fuera de potencia, raiz cuadrada y porcentaje.
-- Precedencia matematica entre operadores distintos.
+- Parentesis para agrupar expresiones.
 - Internacionalizacion.
 - Temas visuales avanzados.
 - Modo offline.

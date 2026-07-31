@@ -36,14 +36,14 @@ func TestCalculateBasicOperationsWithMultipleOperands(t *testing.T) {
 	}
 }
 
-func TestCalculateEvaluatesLeftToRightWithoutMixedPrecedence(t *testing.T) {
+func TestCalculateEvaluatesMixedOperationsWithPrecedence(t *testing.T) {
 	result, err := calculation.Calculate("2+3*4")
 	if err != nil {
 		t.Fatalf("expected no error, got %v", err)
 	}
 
-	if result != 20 {
-		t.Fatalf("expected 20, got %v", result)
+	if result != 14 {
+		t.Fatalf("expected 14, got %v", result)
 	}
 }
 
@@ -68,8 +68,35 @@ func TestCalculateAdvancedOperations(t *testing.T) {
 		{name: "negative exponent", expression: "2^-2", expected: 0.25},
 		{name: "square root", expression: "sqrt(81)", expected: 9},
 		{name: "percentage", expression: "200%10", expected: 20},
-		{name: "advanced operations left to right", expression: "2+3^2", expected: 25},
+		{name: "power precedence", expression: "2+3^2", expected: 11},
 		{name: "square root as operand", expression: "sqrt(81)+1", expected: 10},
+		{name: "square root with mixed precedence", expression: "sqrt(16)+2*3", expected: 10},
+		{name: "percentage precedence", expression: "100+200%10", expected: 120},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			result, err := calculation.Calculate(test.expression)
+			if err != nil {
+				t.Fatalf("expected no error, got %v", err)
+			}
+
+			if result != test.expected {
+				t.Fatalf("expected %v, got %v", test.expected, result)
+			}
+		})
+	}
+}
+
+func TestCalculateEvaluatesSamePrecedenceLeftToRight(t *testing.T) {
+	tests := []struct {
+		name       string
+		expression string
+		expected   float64
+	}{
+		{name: "multiplication and division", expression: "20/5*2", expected: 8},
+		{name: "addition and subtraction", expression: "20-5+3", expected: 18},
+		{name: "power", expression: "2^3^2", expected: 64},
 	}
 
 	for _, test := range tests {
