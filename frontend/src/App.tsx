@@ -13,14 +13,17 @@ import {
 type ButtonConfig = {
   label: string
   action: string
-  kind?: 'control' | 'operator' | 'equals' | 'blank'
+  kind?: 'control' | 'operator' | 'equals'
   ariaLabel?: string
+  layout?: 'wide'
 }
 
 const buttons: ButtonConfig[] = [
-  { label: 'C', action: 'clear', kind: 'control', ariaLabel: 'Limpiar' },
-  { label: 'DEL', action: 'delete', kind: 'control', ariaLabel: 'Eliminar ultimo caracter' },
-  { label: '', action: 'blank', kind: 'blank' },
+  { label: 'C', action: 'clear', kind: 'control', ariaLabel: 'Limpiar', layout: 'wide' },
+  { label: 'DEL', action: 'delete', kind: 'control', ariaLabel: 'Eliminar ultimo caracter', layout: 'wide' },
+  { label: '√', action: '√', kind: 'operator', ariaLabel: 'Raiz cuadrada' },
+  { label: '^', action: '^', kind: 'operator', ariaLabel: 'Potencia' },
+  { label: '%', action: '%', kind: 'operator', ariaLabel: 'Porcentaje' },
   { label: '÷', action: '÷', kind: 'operator', ariaLabel: 'Dividir' },
   { label: '7', action: '7' },
   { label: '8', action: '8' },
@@ -36,8 +39,7 @@ const buttons: ButtonConfig[] = [
   { label: '+', action: '+', kind: 'operator', ariaLabel: 'Sumar' },
   { label: '0', action: '0' },
   { label: '.', action: '.', ariaLabel: 'Punto decimal' },
-  { label: '', action: 'blank', kind: 'blank' },
-  { label: '=', action: 'equals', kind: 'equals', ariaLabel: 'Calcular' },
+  { label: '=', action: 'equals', kind: 'equals', ariaLabel: 'Calcular', layout: 'wide' },
 ]
 
 function getDisplayError(message: string) {
@@ -45,6 +47,14 @@ function getDisplayError(message: string) {
 
   if (normalizedMessage.includes('cero')) {
     return 'No se puede dividir entre cero'
+  }
+
+  if (normalizedMessage.includes('raiz') || normalizedMessage.includes('raíz')) {
+    return 'Raíz inválida'
+  }
+
+  if (normalizedMessage.includes('finito')) {
+    return 'Resultado no válido'
   }
 
   if (normalizedMessage.includes('operacion') || normalizedMessage.includes('operación')) {
@@ -192,6 +202,10 @@ export function App() {
         '*': '×',
         '/': '÷',
         '-': '−',
+        '^': '^',
+        '%': '%',
+        r: '√',
+        R: '√',
         Enter: 'equals',
         Backspace: 'delete',
         Escape: 'clear',
@@ -234,22 +248,18 @@ export function App() {
         </div>
 
         <div className="keypad" aria-label="Calculadora">
-          {buttons.map((button, index) =>
-            button.kind === 'blank' ? (
-              <span className="key key-blank" key={`${button.action}-${index}`} aria-hidden="true" />
-            ) : (
-              <button
-                aria-label={button.ariaLabel ?? button.label}
-                className={`key key-${button.kind ?? 'number'}`}
-                disabled={isSubmitting && button.action === 'equals'}
-                key={`${button.action}-${index}`}
-                onClick={() => handleAction(button.action)}
-                type="button"
-              >
-                {button.label}
-              </button>
-            ),
-          )}
+          {buttons.map((button, index) => (
+            <button
+              aria-label={button.ariaLabel ?? button.label}
+              className={`key key-${button.kind ?? 'number'}${button.layout ? ` key-${button.layout}` : ''}`}
+              disabled={isSubmitting && button.action === 'equals'}
+              key={`${button.action}-${index}`}
+              onClick={() => handleAction(button.action)}
+              type="button"
+            >
+              {button.label}
+            </button>
+          ))}
         </div>
       </section>
     </main>

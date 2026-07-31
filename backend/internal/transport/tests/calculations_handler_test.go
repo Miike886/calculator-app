@@ -33,6 +33,9 @@ func TestCalculationsHandlerCalculatesBasicOperations(t *testing.T) {
 		{name: "division", expression: "100/2/5", expected: 10},
 		{name: "division with negative divisor", expression: "100/-2/5", expected: -10},
 		{name: "left to right", expression: "2+3*4", expected: 20},
+		{name: "power", expression: "2^3", expected: 8},
+		{name: "square root", expression: "sqrt(81)", expected: 9},
+		{name: "percentage", expression: "200%10", expected: 20},
 	}
 
 	for _, test := range tests {
@@ -71,13 +74,13 @@ func TestCalculationsHandlerRejectsInvalidJSON(t *testing.T) {
 	assertErrorCode(t, response, http.StatusBadRequest, "INVALID_JSON")
 }
 
-func TestCalculationsHandlerRejectsUnsupportedOperation(t *testing.T) {
-	request := httptest.NewRequest(http.MethodPost, "/api/v1/calculations", bytes.NewBufferString(`{"expression":"2^3"}`))
+func TestCalculationsHandlerRejectsIncompleteExpression(t *testing.T) {
+	request := httptest.NewRequest(http.MethodPost, "/api/v1/calculations", bytes.NewBufferString(`{"expression":"2^"}`))
 	response := httptest.NewRecorder()
 
 	transport.CalculationsHandler(response, request)
 
-	assertErrorCode(t, response, http.StatusBadRequest, "UNSUPPORTED_OPERATION")
+	assertErrorCode(t, response, http.StatusBadRequest, "INCOMPLETE_EXPRESSION")
 }
 
 func TestCalculationsHandlerRejectsInvalidCharacter(t *testing.T) {
@@ -114,6 +117,24 @@ func TestCalculationsHandlerRejectsDivisionByZero(t *testing.T) {
 	transport.CalculationsHandler(response, request)
 
 	assertErrorCode(t, response, http.StatusBadRequest, "DIVISION_BY_ZERO")
+}
+
+func TestCalculationsHandlerRejectsNegativeSquareRoot(t *testing.T) {
+	request := httptest.NewRequest(http.MethodPost, "/api/v1/calculations", bytes.NewBufferString(`{"expression":"sqrt(-9)"}`))
+	response := httptest.NewRecorder()
+
+	transport.CalculationsHandler(response, request)
+
+	assertErrorCode(t, response, http.StatusBadRequest, "NEGATIVE_SQUARE_ROOT")
+}
+
+func TestCalculationsHandlerRejectsNonFiniteResult(t *testing.T) {
+	request := httptest.NewRequest(http.MethodPost, "/api/v1/calculations", bytes.NewBufferString(`{"expression":"9999999999^9999999999"}`))
+	response := httptest.NewRecorder()
+
+	transport.CalculationsHandler(response, request)
+
+	assertErrorCode(t, response, http.StatusBadRequest, "NON_FINITE_RESULT")
 }
 
 func assertErrorCode(t *testing.T, response *httptest.ResponseRecorder, expectedStatus int, expectedCode string) {

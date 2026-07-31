@@ -24,7 +24,7 @@ func TestCalculateRejectsExpressionOverMaxLength(t *testing.T) {
 }
 
 func TestCalculateRejectsIncompleteExpression(t *testing.T) {
-	tests := []string{"1+", "+1", "1++2", "1.", "-", "1/-"}
+	tests := []string{"1+", "+1", "1++2", "1.", "-", "1/-", "sqrt()", "sqrt(9", "2^", "200%"}
 
 	for _, expression := range tests {
 		t.Run(expression, func(t *testing.T) {
@@ -34,14 +34,6 @@ func TestCalculateRejectsIncompleteExpression(t *testing.T) {
 				t.Fatalf("expected ErrInvalidExpression, got %v", err)
 			}
 		})
-	}
-}
-
-func TestCalculateRejectsUnsupportedOperations(t *testing.T) {
-	_, err := calculation.Calculate("2^3")
-
-	if !errors.Is(err, calculation.ErrUnsupportedOperation) {
-		t.Fatalf("expected ErrUnsupportedOperation, got %v", err)
 	}
 }
 
@@ -58,5 +50,21 @@ func TestCalculateRejectsDivisionByZero(t *testing.T) {
 
 	if !errors.Is(err, calculation.ErrDivisionByZero) {
 		t.Fatalf("expected ErrDivisionByZero, got %v", err)
+	}
+}
+
+func TestCalculateRejectsNegativeSquareRoot(t *testing.T) {
+	_, err := calculation.Calculate("sqrt(-9)")
+
+	if !errors.Is(err, calculation.ErrNegativeSquareRoot) {
+		t.Fatalf("expected ErrNegativeSquareRoot, got %v", err)
+	}
+}
+
+func TestCalculateRejectsNonFiniteResults(t *testing.T) {
+	_, err := calculation.Calculate("9999999999^9999999999")
+
+	if !errors.Is(err, calculation.ErrNonFiniteResult) {
+		t.Fatalf("expected ErrNonFiniteResult, got %v", err)
 	}
 }

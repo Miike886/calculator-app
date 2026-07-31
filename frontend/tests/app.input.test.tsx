@@ -81,6 +81,35 @@ describe('App input handling', () => {
     )
   })
 
+  it('uses keyboard input for advanced operations', async () => {
+    vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ expression: '2^3', result: 8 }),
+    } as Response)
+
+    render(<App />)
+
+    fireEvent.keyDown(window, { key: '2' })
+    fireEvent.keyDown(window, { key: '^' })
+    fireEvent.keyDown(window, { key: '3' })
+    fireEvent.keyDown(window, { key: 'Enter' })
+
+    await waitFor(() => {
+      expect(screen.getByTestId('expression-display')).toHaveTextContent('2^3')
+      expect(screen.getByTestId('result-display')).toHaveTextContent('8')
+    })
+  })
+
+  it('wraps the current operand using the square root keyboard shortcut', () => {
+    render(<App />)
+
+    fireEvent.keyDown(window, { key: '8' })
+    fireEvent.keyDown(window, { key: '1' })
+    fireEvent.keyDown(window, { key: 'r' })
+
+    expect(screen.getByTestId('expression-display')).toHaveTextContent('√(81)')
+  })
+
   it('keeps long expressions available in the display', () => {
     render(<App />)
 

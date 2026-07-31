@@ -70,6 +70,7 @@ La estructura efectiva usa `frontend/` y `backend/` para mantener el monorepo si
   - `Backspace`
   - `Escape`
 - Normalizar simbolos antes de enviar al backend cuando sea necesario, por ejemplo `x` a `*`.
+- Normalizar operaciones avanzadas visuales, por ejemplo `√(81)` a `sqrt(81)`.
 - Llamar a `POST /api/v1/calculations` al ejecutar el calculo.
 - Mostrar errores de validacion de manera clara.
 
@@ -204,6 +205,7 @@ Responsabilidades:
 - evaluar expresiones lineales de izquierda a derecha
 - calcular resultados
 - detectar division entre cero
+- detectar raiz cuadrada negativa y resultados no finitos
 
 ## Estrategia de manejo de errores
 
@@ -270,8 +272,12 @@ Obligatorias:
 - Calculo de resta.
 - Calculo de multiplicacion.
 - Calculo de division.
+- Calculo de potencia.
+- Calculo de raiz cuadrada.
+- Calculo de porcentaje.
 - Evaluacion de izquierda a derecha sin precedencia entre operadores distintos.
 - Division entre cero.
+- Raiz cuadrada negativa y resultados no finitos.
 - Serializacion de responses exitosas y errores.
 
 ### E2E
@@ -284,6 +290,8 @@ Obligatorias:
 - Usuario borra con `Backspace` o `DEL`.
 - Usuario limpia con `Escape` o `C`.
 - Usuario recibe error al intentar dividir entre cero.
+- Usuario calcula potencia, raiz cuadrada y porcentaje desde la UI.
+- Usuario recibe error al intentar calcular raiz cuadrada de un valor negativo.
 
 Los comandos y alcance vigente de cada capa de pruebas se documentan en `docs/testing.md`.
 
@@ -321,6 +329,7 @@ No se requieren variables para persistencia, autenticacion ni credenciales en es
 | Separacion por capas en backend | Mejora mantenibilidad y testabilidad sin introducir complejidad excesiva. |
 | Pruebas desde el inicio | Reduce riesgo de regresiones en interacciones y reglas de calculo. |
 | Tests separados por capa y comportamiento | Mantiene legibilidad, evita suites monoliticas y facilita detectar brechas reales de cobertura. |
+| Operaciones avanzadas en el mismo endpoint | Mantiene un contrato simple y evita crear endpoints por operacion sin necesidad. |
 
 ## Riesgos de sobreingenieria a evitar
 
@@ -330,6 +339,6 @@ No se requieren variables para persistencia, autenticacion ni credenciales en es
 - Agregar autenticacion antes de existir usuarios o datos privados.
 - Usar frameworks pesados sin una necesidad clara.
 - Implementar un motor matematico demasiado amplio para la primera version.
-- Agregar operaciones futuras antes de cerrar suma, resta, multiplicacion y division.
+- Agregar operaciones cientificas no solicitadas.
 - Convertir la UI en una pantalla de marketing en lugar de una calculadora usable.
 - Crear abstracciones genericas antes de tener repeticion real.

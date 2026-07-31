@@ -525,3 +525,62 @@ aún así dentro del back siento que están un poco desacoplados los test. En tr
 
 Alinea todos los skills y la nueva documentación con estos nuevos cambios
 ```
+
+## Prompt 15
+
+```text
+Usa la Skill `feature-implementer` para agregar operaciones avanzadas a la calculadora existente.
+
+Implementa:
+
+- potencia;
+- raíz cuadrada;
+- porcentaje.
+
+Comportamiento esperado:
+
+- Potencia debe recibir base y exponente.
+- Raíz cuadrada debe operar sobre un solo valor.
+- Porcentaje debe calcular:
+  percentage(value, rate) = value * rate / 100
+- El resultado de cualquiera de estas operaciones debe poder reutilizarse para continuar calculando.
+- Debe funcionar mediante clic y teclado cuando exista una tecla o combinación apropiada.
+- Mantén los errores integrados en el display.
+
+Agrega botones para las nuevas operaciones sin romper la distribución visual actual. Ajusta la cuadrícula de forma coherente y responsive.
+
+Incluye validaciones para:
+
+- raíz cuadrada de números negativos;
+- operandos faltantes;
+- valores no numéricos;
+- resultados no finitos;
+- base o exponente inválidos;
+- uso incorrecto de operaciones unarias y binarias.
+
+Actualiza frontend, backend y contrato API. Agrega pruebas backend y frontend para casos exitosos, inválidos, límites y continuidad desde resultados previos.
+
+No agregues historial, persistencia ni parsing de expresiones con precedencia matemática.
+
+Agrega este prompt a `docs/prompts-usados.md`.
+
+No hagas commits ni modifiques ramas.
+```
+
+## Prompt 16
+
+```text
+Si te fijas en la ditribución de la ui, hay varios espacios vacíos que tienen botones inservibles. Realiza la redistribución natural para no dejar huecos
+```
+
+## Prompt 17
+
+```text
+Aún se ve mal, lo que podemos hacer es extender a 2 posiciones horizontalmente los botones de C y Del, y también dejar en 2 posiciones el "=" para que todos los demás botones estén uniformes
+```
+
+## Prompt 18
+
+```text
+la intención es que fueran bloques de 2 unidades horizontales, no de 2x2, ajusta eso
+```

@@ -79,6 +79,12 @@ func writeCalculationError(w http.ResponseWriter, expression string, err error) 
 	case errors.Is(err, calculation.ErrDivisionByZero):
 		apiErr.Code = "DIVISION_BY_ZERO"
 		apiErr.Message = "No se puede dividir entre cero."
+	case errors.Is(err, calculation.ErrNegativeSquareRoot):
+		apiErr.Code = "NEGATIVE_SQUARE_ROOT"
+		apiErr.Message = "No se puede calcular la raiz cuadrada de un numero negativo."
+	case errors.Is(err, calculation.ErrNonFiniteResult):
+		apiErr.Code = "NON_FINITE_RESULT"
+		apiErr.Message = "El resultado no es finito."
 	}
 
 	writeJSON(w, http.StatusBadRequest, errorResponse{Error: apiErr})
