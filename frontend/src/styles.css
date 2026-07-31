@@ -200,12 +200,9 @@ button {
   opacity: 0.74;
 }
 
-.key-blank {
-  aspect-ratio: 1.38 / 0.9;
-  background: transparent;
-  border: 0;
-  box-shadow: none;
-  min-height: 58px;
+.key-wide {
+  aspect-ratio: auto;
+  grid-column: span 2;
 }
 
 .sr-only {
@@ -239,7 +236,4 @@ button {
     min-height: 52px;
   }
 
-  .key-blank {
-    min-height: 52px;
-  }
 }

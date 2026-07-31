@@ -38,14 +38,16 @@ Estructura visual sugerida:
 | expresion actual      |
 | resultado             |
 +-----------------------+
-| C   DEL   √   /       |
-| ^    %        x       |
-| 7    8    9   -       |
-| 4    5    6   +       |
-| 1    2    3   =       |
-| 0         .           |
+| C    C   DEL DEL      |
+| √    ^    %   /       |
+| 7    8    9   x       |
+| 4    5    6   -       |
+| 1    2    3   +       |
+| 0    .    =   =       |
 +-----------------------+
 ```
+
+La grilla no debe renderizar botones vacios o inservibles. Para conservar una distribucion natural, `C`, `DEL` y `=` pueden ocupar dos columnas horizontales, manteniendo la altura normal de una tecla; el resto de botones debe conservar tamano uniforme.
 
 El punto decimal `.` queda como recomendacion si se decide soportar decimales desde la primera version. Si no se soporta, debe excluirse de la UI inicial para evitar expectativas incorrectas.
 

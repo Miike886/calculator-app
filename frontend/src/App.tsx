@@ -13,35 +13,33 @@ import {
 type ButtonConfig = {
   label: string
   action: string
-  kind?: 'control' | 'operator' | 'equals' | 'blank'
+  kind?: 'control' | 'operator' | 'equals'
   ariaLabel?: string
+  layout?: 'wide'
 }
 
 const buttons: ButtonConfig[] = [
-  { label: 'C', action: 'clear', kind: 'control', ariaLabel: 'Limpiar' },
-  { label: 'DEL', action: 'delete', kind: 'control', ariaLabel: 'Eliminar ultimo caracter' },
+  { label: 'C', action: 'clear', kind: 'control', ariaLabel: 'Limpiar', layout: 'wide' },
+  { label: 'DEL', action: 'delete', kind: 'control', ariaLabel: 'Eliminar ultimo caracter', layout: 'wide' },
   { label: '√', action: '√', kind: 'operator', ariaLabel: 'Raiz cuadrada' },
-  { label: '÷', action: '÷', kind: 'operator', ariaLabel: 'Dividir' },
   { label: '^', action: '^', kind: 'operator', ariaLabel: 'Potencia' },
   { label: '%', action: '%', kind: 'operator', ariaLabel: 'Porcentaje' },
-  { label: '', action: 'blank', kind: 'blank' },
-  { label: '×', action: '×', kind: 'operator', ariaLabel: 'Multiplicar' },
+  { label: '÷', action: '÷', kind: 'operator', ariaLabel: 'Dividir' },
   { label: '7', action: '7' },
   { label: '8', action: '8' },
   { label: '9', action: '9' },
-  { label: '−', action: '−', kind: 'operator', ariaLabel: 'Restar' },
+  { label: '×', action: '×', kind: 'operator', ariaLabel: 'Multiplicar' },
   { label: '4', action: '4' },
   { label: '5', action: '5' },
   { label: '6', action: '6' },
-  { label: '+', action: '+', kind: 'operator', ariaLabel: 'Sumar' },
+  { label: '−', action: '−', kind: 'operator', ariaLabel: 'Restar' },
   { label: '1', action: '1' },
   { label: '2', action: '2' },
   { label: '3', action: '3' },
-  { label: '=', action: 'equals', kind: 'equals', ariaLabel: 'Calcular' },
+  { label: '+', action: '+', kind: 'operator', ariaLabel: 'Sumar' },
   { label: '0', action: '0' },
   { label: '.', action: '.', ariaLabel: 'Punto decimal' },
-  { label: '', action: 'blank', kind: 'blank' },
-  { label: '', action: 'blank', kind: 'blank' },
+  { label: '=', action: 'equals', kind: 'equals', ariaLabel: 'Calcular', layout: 'wide' },
 ]
 
 function getDisplayError(message: string) {
@@ -250,22 +248,18 @@ export function App() {
         </div>
 
         <div className="keypad" aria-label="Calculadora">
-          {buttons.map((button, index) =>
-            button.kind === 'blank' ? (
-              <span className="key key-blank" key={`${button.action}-${index}`} aria-hidden="true" />
-            ) : (
-              <button
-                aria-label={button.ariaLabel ?? button.label}
-                className={`key key-${button.kind ?? 'number'}`}
-                disabled={isSubmitting && button.action === 'equals'}
-                key={`${button.action}-${index}`}
-                onClick={() => handleAction(button.action)}
-                type="button"
-              >
-                {button.label}
-              </button>
-            ),
-          )}
+          {buttons.map((button, index) => (
+            <button
+              aria-label={button.ariaLabel ?? button.label}
+              className={`key key-${button.kind ?? 'number'}${button.layout ? ` key-${button.layout}` : ''}`}
+              disabled={isSubmitting && button.action === 'equals'}
+              key={`${button.action}-${index}`}
+              onClick={() => handleAction(button.action)}
+              type="button"
+            >
+              {button.label}
+            </button>
+          ))}
         </div>
       </section>
     </main>

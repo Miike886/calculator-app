@@ -566,3 +566,21 @@ Agrega este prompt a `docs/prompts-usados.md`.
 
 No hagas commits ni modifiques ramas.
 ```
+
+## Prompt 16
+
+```text
+Si te fijas en la ditribución de la ui, hay varios espacios vacíos que tienen botones inservibles. Realiza la redistribución natural para no dejar huecos
+```
+
+## Prompt 17
+
+```text
+Aún se ve mal, lo que podemos hacer es extender a 2 posiciones horizontalmente los botones de C y Del, y también dejar en 2 posiciones el "=" para que todos los demás botones estén uniformes
+```
+
+## Prompt 18
+
+```text
+la intención es que fueran bloques de 2 unidades horizontales, no de 2x2, ajusta eso
+```
