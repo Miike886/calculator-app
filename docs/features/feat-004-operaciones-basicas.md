@@ -20,7 +20,7 @@ Implementada y validada.
 - La UI reemplaza un operador pendiente cuando aun no se ingreso el siguiente operando.
 - La UI evita apilar operadores pendientes y conserva solo el ultimo operador seleccionado.
 - Los resultados largos se muestran y reutilizan sin notacion cientifica para mantener expresiones compatibles con el parser.
-- La expresion queda limitada a 48 caracteres en frontend y backend.
+- La expresion queda limitada a 24 caracteres en frontend y backend.
 - El display muestra el contador de caracteres y oculta barras de desplazamiento vertical.
 - El punto decimal al inicio de un operando se presenta como `0.`.
 - Los errores siguen mostrandose dentro del display.
@@ -33,7 +33,7 @@ Implementada y validada.
 - `100/2/5` retorna `10`.
 - `100/-2/5` retorna `-10`.
 - `2+3*4` retorna `20`.
-- Una expresion de mas de 48 caracteres retorna `EXPRESSION_TOO_LONG`.
+- Una expresion de mas de 24 caracteres retorna `EXPRESSION_TOO_LONG`.
 - `10/0` retorna `400` con `DIVISION_BY_ZERO`.
 - Clicks y teclado mantienen la misma logica de estado.
 - No se agregan potencia, raiz cuadrada, porcentaje ni precedencia.

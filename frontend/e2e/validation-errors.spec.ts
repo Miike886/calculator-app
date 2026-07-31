@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test'
+import { MAX_EXPRESSION_LENGTH } from '../src/calculator'
 import { openCalculator } from './helpers'
 
 test.beforeEach(async ({ page }) => {
@@ -22,10 +23,10 @@ test('keeps decimal and length validations usable', async ({ page }) => {
   await expect(page.getByTestId('expression-display')).toHaveText('0.5')
 
   await page.getByRole('button', { name: 'Limpiar' }).click()
-  for (let index = 0; index < 49; index += 1) {
+  for (let index = 0; index < MAX_EXPRESSION_LENGTH + 1; index += 1) {
     await page.getByRole('button', { name: '1' }).click()
   }
 
-  await expect(page.getByTestId('expression-display')).toHaveText('1'.repeat(48))
-  await expect(page.getByRole('alert')).toContainText('Máximo 48 caracteres')
+  await expect(page.getByTestId('expression-display')).toHaveText('1'.repeat(MAX_EXPRESSION_LENGTH))
+  await expect(page.getByRole('alert')).toContainText(`Máximo ${MAX_EXPRESSION_LENGTH} caracteres`)
 })

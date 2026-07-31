@@ -46,7 +46,7 @@ Implementada y validada.
 - Resultado no finito: `NON_FINITE_RESULT`.
 - Operandos faltantes o no numericos: `INCOMPLETE_EXPRESSION`.
 - Division entre cero conserva `DIVISION_BY_ZERO`.
-- Expresiones mayores a 48 caracteres conservan `EXPRESSION_TOO_LONG`.
+- Expresiones mayores a 24 caracteres conservan `EXPRESSION_TOO_LONG`.
 
 ## Pruebas
 

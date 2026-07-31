@@ -19,7 +19,7 @@ var (
 	ErrNonFiniteResult      = errors.New("non-finite result")
 )
 
-const MaxExpressionLength = 48
+const MaxExpressionLength = 24
 
 func Calculate(expression string) (float64, error) {
 	normalized := strings.ReplaceAll(expression, " ", "")
@@ -188,6 +188,9 @@ func parseOperand(value string) (float64, error) {
 func parseNumber(value string) (float64, error) {
 	number, err := strconv.ParseFloat(value, 64)
 	if err != nil {
+		if errors.Is(err, strconv.ErrRange) {
+			return 0, ErrNonFiniteResult
+		}
 		return 0, fmt.Errorf("%w: operand", ErrInvalidExpression)
 	}
 

@@ -26,5 +26,11 @@ export async function calculateExpression(expression: string): Promise<Calculati
     throw new Error(payload.error?.message ?? 'No se pudo calcular la expresion.')
   }
 
-  return response.json() as Promise<CalculationResponse>
+  const payload = (await response.json().catch(() => null)) as Partial<CalculationResponse> | null
+
+  if (!payload || typeof payload.result !== 'number' || !Number.isFinite(payload.result)) {
+    throw new Error('El resultado no es finito.')
+  }
+
+  return payload as CalculationResponse
 }

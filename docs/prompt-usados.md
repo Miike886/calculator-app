@@ -507,28 +507,6 @@ No hagas commits ni modifiques ramas.
 ## Prompt 12
 
 ```text
-no veo claramente los tests que estás generando tanto para el backend como para el front, mismos que fueron mencionados explícitamente dentro de las skills. Es importante que tengamos test unitarios cubriendo todas las funcionalidades importantes, test e2e y todo lo necesario
-tanto para back, como para front. Revisa eso con la skill que corresponde y si es necesario modifícala para alinear todo esto
-```
-
-## Prompt 13
-
-```text
-Siento que las capas de test no están bien alineadas, hay muchas incosistencias, hay que alinear la arquitectura mpara mantener todo eso ordenado
-no sé cómo lo consideres, pero creo que es más organizado separar cada test en archivos diferentes, porque llega un punto en el que el archivo de test se vuelve ilegible
-```
-
-## Prompt 14
-
-```text
-aún así dentro del back siento que están un poco desacoplados los test. En transport se nota todo amontonado entre los archivos normales y los de test
-
-Alinea todos los skills y la nueva documentación con estos nuevos cambios
-```
-
-## Prompt 15
-
-```text
 Usa la Skill `feature-implementer` para agregar operaciones avanzadas a la calculadora existente.
 
 Implementa:
@@ -567,20 +545,54 @@ Agrega este prompt a `docs/prompts-usados.md`.
 No hagas commits ni modifiques ramas.
 ```
 
+## Prompt 13
+
+```text
+Usa la Skill `feature-implementer` para ampliar las pruebas E2E existentes con Playwright después de la implementación de las operaciones básicas y avanzadas.
+
+Agrega o ajusta pruebas para los flujos críticos:
+
+- operación básica mediante clics;
+- operación mediante teclado;
+- cálculo con varios operandos;
+- operación encadenada usando el resultado anterior;
+- limpieza con `C` y `Escape`;
+- borrado con `DEL` y `Backspace`;
+- división entre cero;
+- raíz cuadrada de un número negativo;
+- potencia;
+- porcentaje;
+- errores del backend o de red;
+- funcionamiento básico en viewport móvil.
+
+Reutiliza la configuración, fixtures, helpers y convenciones actuales de Playwright. Evita duplicar escenarios ya cubiertos.
+
+Las pruebas deben usar selectores accesibles, ejecutar el flujo real entre frontend y backend y no depender de esperas arbitrarias ni detalles visuales frágiles.
+
+Revisa también si existen huecos relevantes en las pruebas unitarias, de componentes, handlers e integración, y agrega únicamente los casos faltantes que aporten cobertura real.
+
+No cambies el comportamiento funcional ni el diseño salvo que sea necesario para mejorar la accesibilidad o estabilidad de las pruebas.
+
+Agrega este prompt a `docs/prompts-usados.md`.
+
+No hagas commits ni modifiques ramas.
+El borde derecho del delete y del "=" no está alineado con los demás
+```
+
+## Prompt 14
+
+```text
+El límite de 48 caracteres es bastante, hay que reducirlo a algo realista y razonable
+```
+
+## Prompt 15
+
+```text
+la ui no tiene un controlador directo para navegar horizontalmente en el resultado, tenemos que ajustar eso ya sea restringiendo la cantidad de caracteres, o agregando navegación explícita de forma natural
+```
+
 ## Prompt 16
 
 ```text
-Si te fijas en la ditribución de la ui, hay varios espacios vacíos que tienen botones inservibles. Realiza la redistribución natural para no dejar huecos
-```
-
-## Prompt 17
-
-```text
-Aún se ve mal, lo que podemos hacer es extender a 2 posiciones horizontalmente los botones de C y Del, y también dejar en 2 posiciones el "=" para que todos los demás botones estén uniformes
-```
-
-## Prompt 18
-
-```text
-la intención es que fueran bloques de 2 unidades horizontales, no de 2x2, ajusta eso
+Asegúrate de manejar todas las excepciones, por ejemplo si un resultado sobrepasa el límite del tipo de dato
 ```

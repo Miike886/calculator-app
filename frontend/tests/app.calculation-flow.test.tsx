@@ -154,32 +154,32 @@ describe('App calculation flow', () => {
     vi.spyOn(globalThis, 'fetch')
       .mockResolvedValueOnce({
         ok: true,
-        json: async () => ({ expression: '99999999999999*99999999999999', result: 9.9999999999998e27 }),
+        json: async () => ({ expression: '99999999999*9999999999', result: 9.9999999989e20 }),
       } as Response)
       .mockResolvedValueOnce({
         ok: true,
-        json: async () => ({ expression: '9999999999999800000000000000+2', result: 9.9999999999998e27 }),
+        json: async () => ({ expression: '999999999890000000000+2', result: 9.9999999989e20 }),
       } as Response)
 
     render(<App />)
 
-    for (const value of Array(14).fill('9')) {
+    for (const value of Array(11).fill('9')) {
       fireEvent.click(screen.getByRole('button', { name: value }))
     }
     fireEvent.click(screen.getByRole('button', { name: 'Multiplicar' }))
-    for (const value of Array(14).fill('9')) {
+    for (const value of Array(10).fill('9')) {
       fireEvent.click(screen.getByRole('button', { name: value }))
     }
     fireEvent.click(screen.getByRole('button', { name: 'Calcular' }))
 
     await waitFor(() => {
-      expect(screen.getByTestId('result-display')).toHaveTextContent('9999999999999800000000000000')
+      expect(screen.getByTestId('result-display')).toHaveTextContent('999999999890000000000')
     })
 
     fireEvent.click(screen.getByRole('button', { name: 'Sumar' }))
     fireEvent.click(screen.getByRole('button', { name: '2' }))
 
-    expect(screen.getByTestId('expression-display')).toHaveTextContent('9999999999999800000000000000+2')
+    expect(screen.getByTestId('expression-display')).toHaveTextContent('999999999890000000000+2')
     expect(screen.getByTestId('expression-display')).not.toHaveTextContent('e')
   })
 

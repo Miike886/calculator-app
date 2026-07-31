@@ -1,5 +1,5 @@
 export const operators = ['+', '−', '×', '÷', '^', '%']
-export const MAX_EXPRESSION_LENGTH = 48
+export const MAX_EXPRESSION_LENGTH = 24
 
 export type AppendInputState = {
   error: string

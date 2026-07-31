@@ -134,6 +134,17 @@ export function App() {
     setExpression((current) => current.slice(0, -1))
   }, [])
 
+  const scrollDisplay = useCallback((direction: 'left' | 'right') => {
+    const offset = direction === 'left' ? -120 : 120
+
+    for (const displayLine of [expressionDisplayRef.current, resultDisplayRef.current]) {
+      displayLine?.scrollBy({
+        behavior: 'smooth',
+        left: offset,
+      })
+    }
+  }, [])
+
   const submitCalculation = useCallback(async () => {
     if (isSubmitting) {
       return
@@ -245,6 +256,24 @@ export function App() {
           <span className="display-message" data-testid="display-message" role={error ? 'alert' : undefined}>
             {error || (isSubmitting ? 'Procesando operación' : expressionLimitText)}
           </span>
+          <div className="display-scroll-controls" aria-label="Navegar display">
+            <button
+              aria-label="Desplazar display a la izquierda"
+              className="display-scroll-button"
+              onClick={() => scrollDisplay('left')}
+              type="button"
+            >
+              ‹
+            </button>
+            <button
+              aria-label="Desplazar display a la derecha"
+              className="display-scroll-button"
+              onClick={() => scrollDisplay('right')}
+              type="button"
+            >
+              ›
+            </button>
+          </div>
         </div>
 
         <div className="keypad" aria-label="Calculadora">

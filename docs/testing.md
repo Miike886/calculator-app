@@ -107,10 +107,14 @@ Cubre flujos reales:
 
 - suma por clicks;
 - operacion mixta evaluada de izquierda a derecha;
+- multiples operandos;
+- operacion encadenada desde un resultado previo;
 - calculo por teclado con `Enter`;
 - `Backspace`, `DEL`, `Escape` y `C`;
 - division entre cero;
 - punto decimal y limite de caracteres;
+- errores de backend o red;
+- funcionamiento basico en viewport movil;
 - potencia, raiz cuadrada, porcentaje y continuidad desde resultados.
 
 Estructura actual:
@@ -119,6 +123,8 @@ Estructura actual:
 - `frontend/e2e/keyboard-controls.spec.ts`: teclado, `Backspace`, `DEL`, `Escape` y `C`.
 - `frontend/e2e/validation-errors.spec.ts`: errores y validaciones visibles.
 - `frontend/e2e/advanced-operations.spec.ts`: potencia, raiz cuadrada, porcentaje y errores avanzados.
+- `frontend/e2e/network-errors.spec.ts`: errores de backend o red.
+- `frontend/e2e/mobile.spec.ts`: smoke test responsive a 320 px y alineacion de grilla.
 
 ## Build
 

@@ -15,6 +15,8 @@ describe('App render', () => {
     expect(screen.getByRole('button', { name: 'Raiz cuadrada' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Porcentaje' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Calcular' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Desplazar display a la izquierda' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Desplazar display a la derecha' })).toBeInTheDocument()
     expect(container.querySelectorAll('.key-blank')).toHaveLength(0)
     expect(screen.getByRole('button', { name: 'Limpiar' })).toHaveClass('key-wide')
     expect(screen.getByRole('button', { name: 'Eliminar ultimo caracter' })).toHaveClass('key-wide')

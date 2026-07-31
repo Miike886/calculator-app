@@ -41,3 +41,21 @@ test('shows square root errors inside the display', async ({ page }) => {
   await expect(page.getByTestId('result-display')).toHaveText('Error')
   await expect(page.getByRole('alert')).toContainText('Raíz inválida')
 })
+
+test('shows non-finite result errors inside the display', async ({ page }) => {
+  for (let index = 0; index < 10; index += 1) {
+    await page.getByRole('button', { name: '9' }).click()
+  }
+
+  await page.getByRole('button', { name: 'Potencia' }).click()
+
+  for (let index = 0; index < 10; index += 1) {
+    await page.getByRole('button', { name: '9' }).click()
+  }
+
+  await page.getByRole('button', { name: 'Calcular' }).click()
+
+  await expect(page.getByTestId('expression-display')).toHaveText('9999999999^9999999999')
+  await expect(page.getByTestId('result-display')).toHaveText('Error')
+  await expect(page.getByRole('alert')).toContainText('Resultado no válido')
+})
